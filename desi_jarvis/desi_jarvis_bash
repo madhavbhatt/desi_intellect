@@ -1,0 +1,100 @@
+
+desi_jarvis_clear_terminal(){
+	tput reset
+	history -c
+}
+
+desi_jarvis_convert_hex_2_dec(){
+	echo "ibase=16; $@"|bc
+}
+
+desi_jarvis_convert_dec_2_hex(){
+	echo "obase=16; $@"|bc
+}
+
+desi_jarvis_upgrade_kali(){
+	sudo apt-get update
+	sudo apt-get upgrade -y
+	sudo apt-get dist-upgrade -y
+	sudo apt-get autoremove -y
+	sudo apt-get autoclean -y
+	sudo apt-get clean -y
+}
+
+desi_jarvis_commit_to_github(){
+
+	# desi_jarvis_commit_to_github argv1 argv2 argv3
+	#	usage argv1 = filename or foldername, 
+	#	argv2 = comment on commit, 
+	#	argv3 = $local_git_repo 
+	#	export local_git_repo=path_to_local_git_repo destination. you can permanently remove $3 for a fixed repo location.
+
+	cd $3
+	git add $1
+	echo $2 | git commit 
+	git push
+}
+
+desi_jarvis_install_kali_tools(){
+
+    echo "1. All"
+    echo "2. Full"
+    echo "3. Forensic"
+    echo "4. GPU"
+    echo "5. NETHUNTER"
+    echo "6. PWTOOLS"
+    echo "7. RFID"
+    echo "8. WEB"
+    echo "9. VOIP"
+    echo "10. TOP10"
+    echo "11. SDR"
+    echo "12. WIRELESS"
+
+    echo "choose TOTAL NUMBER packages you would like to install :"
+    read number
+
+    for i in `seq 1 $number`    
+    do
+	echo ""Enter Number of package$i you would like to install:"
+	read package$i 
+    done
+
+    for j in `seq 1 $number`
+    do
+        sudo apt-get install kali-linux-package$j -y
+    done
+
+}
+
+desi_jarvis_extract() {
+
+ if [ -z "$1" ]; then
+    # display usage if no parameters given
+    echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
+ else
+    if [ -f $1 ] ; then
+        # NAME=${1%.*}
+        # mkdir $NAME && cd $NAME
+        case $1 in
+          *.tar.bz2)   tar xvjf ../$1    ;;
+          *.tar.gz)    tar xvzf ../$1    ;;
+          *.tar.xz)    tar xvJf ../$1    ;;
+          *.lzma)      unlzma ../$1      ;;
+          *.bz2)       bunzip2 ../$1     ;;
+          *.rar)       unrar x -ad ../$1 ;;
+          *.gz)        gunzip ../$1      ;;
+          *.tar)       tar xvf ../$1     ;;
+          *.tbz2)      tar xvjf ../$1    ;;
+          *.tgz)       tar xvzf ../$1    ;;
+          *.zip)       unzip ../$1       ;;
+          *.Z)         uncompress ../$1  ;;
+          *.7z)        7z x ../$1        ;;
+          *.xz)        unxz ../$1        ;;
+          *.exe)       cabextract ../$1  ;;
+          *)           echo "extract: '$1' - unknown archive method" ;;
+        esac
+    else
+        echo "$1 - file does not exist"
+    fi
+fi
+}
