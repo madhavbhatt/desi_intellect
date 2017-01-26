@@ -28,10 +28,11 @@ desi_jarvis_commit_to_github(){
 	#	argv2 = comment on commit, 
 	#	argv3 = $local_git_repo 
 	#	export local_git_repo=path_to_local_git_repo destination. you can permanently remove $3 for a fixed repo location.
-
-	cd $3
+	sudo updatedb
+	sudo locate $1 > /tmp/location 
+	cd `cat /tmp/location`
 	git add $1
-	echo $2 | git commit 
+	echo $2 | git commit -m
 	git push
 }
 
