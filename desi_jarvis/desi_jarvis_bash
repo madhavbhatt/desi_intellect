@@ -41,7 +41,7 @@ desi_jarvis_install_kali_tools(){
     echo "2. Full"
     echo "3. Forensic"
     echo "4. GPU"
-    echo "5. NETHUNTER"
+    echo "5. NETHUNTER (use with cautioun. It removes kali-linux-all and kali-linux-full.)"
     echo "6. PWTOOLS"
     echo "7. RFID"
     echo "8. WEB"
@@ -50,21 +50,24 @@ desi_jarvis_install_kali_tools(){
     echo "11. SDR"
     echo "12. WIRELESS"
 
+    declare -a package=(["1"]="all" ["2"]="full" ["3"]="forensic" ["4"]="gpu" ["5"]="nethunter" ["6"]="pwtools" ["7"]= "rfid" ["8"]= "web" ["9"]="voip" ["10"]= "top10" ["11"]= "sdr" ["12"]="wireless")
+
     echo "choose TOTAL NUMBER packages you would like to install :"
     read number
 
-    for i in `seq 1 $number`    
+    for i in `seq 1 $number`
     do
-	echo ""Enter Number of package$i you would like to install:"
-	read package$i 
+        echo "Enter Number of the package-$i, you would like to install: "
+        read ${pack[$i]}
     done
 
     for j in `seq 1 $number`
     do
-        sudo apt-get install kali-linux-package$j -y
+        sudo apt-get install kali-linux-"${package[${pack[$i]}]}" -y
     done
 
 }
+
 
 desi_jarvis_extract() {
 
