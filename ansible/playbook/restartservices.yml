@@ -1,0 +1,10 @@
+---
+- hosts: web-servers
+  become: true
+  vars:
+    packages: [ 'apache2', 'mysql']
+  handlers:
+     - name: Restarting Serivces
+       service: name={{ item }} state=restarted
+       with_items: packages
+

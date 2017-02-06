@@ -1,0 +1,9 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update apt-cache and Update packages to latest version
+      apt: 
+        update_cache: yes
+        upgrade: dist
+
