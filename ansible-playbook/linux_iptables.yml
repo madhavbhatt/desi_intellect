@@ -1,0 +1,32 @@
+---
+- hosts: test
+  become: true
+  tasks:
+    - iptables:
+          chain: INPUT
+          action: append
+          source: 127.0.0.1
+          jump: ACCEPT
+    - iptables:
+          chain: INPUT
+          action: append
+          ctstate: ESTABLISHED,RELATED
+          jump: ACCEPT
+    - iptables:
+          chain: INPUT
+          action: append
+          protocol: tcp
+          destination_port: 22
+          jump: ACCEPT
+    - iptables:
+          chain: INPUT
+          policy: DROP
+    - iptables:
+          chain: FORWARD
+          policy: DROP
+    - iptables:
+          chain: OUTPUT
+          policy: ACCEPT
+
+
+
