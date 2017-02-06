@@ -1,0 +1,65 @@
+---
+- hosts: test
+  become: true
+  vars:
+    ip: 10.0.0.0/8
+    l4: udp
+    portno: 1194
+  
+  tasks:
+       
+    - iptables:
+        chain: INPUT
+        policy: ACCEPT
+
+    - iptables:
+        flush: yes
+
+    - iptables:
+          chain: INPUT
+          action: append
+          source: 127.0.0.1
+          jump: ACCEPT
+
+    - iptables:
+          chain: INPUT
+          action: append
+          ctstate: ESTABLISHED,RELATED
+          jump: ACCEPT
+
+    - iptables:
+          chain: INPUT
+          action: append
+          protocol: tcp
+          destination_port: 22
+          jump: ACCEPT
+
+    - iptables:
+        chain: INPUT
+        action: append
+        protocol: "{{ l4 }}"
+        destination_port: "{{ portno }}"
+        jump: ACCEPT
+  
+    - iptables:
+        chain: FORWARD
+        out_interface: eno2
+        source: "{{ ip }}"
+        jump: ACCEPT
+
+    - iptables:
+        table: nat
+        chain: POSTROUTING
+        out_interface: eno2
+        source: "{{ ip }}"
+        jump: ACCEPT  
+
+    - iptables:
+          chain: INPUT
+          policy: DROP
+    - iptables:
+          chain: FORWARD
+          policy: DROP
+    - iptables:
+          chain: OUTPUT
+          policy: ACCEPT
