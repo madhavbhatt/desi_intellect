@@ -1,0 +1,10 @@
+---
+- hosts: web-servers
+  become: true
+  tasks:
+     - name: Update apt-cache 
+       apt: update_cache=yes
+
+     - name: Install Vim
+       apt: name=vim state=latest
+
