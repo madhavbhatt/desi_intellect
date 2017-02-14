@@ -1,0 +1,18 @@
+---
+- hosts: web-servers
+  become: true
+  tasks:
+    - name: Update apt-cache and Update packages to latest version
+      apt: 
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install tftp
+       apt: name={{ item }} state=latest
+       with_items:
+       - apache2
+       - mysql-server
+       - php
+       - libapache2-mod-php5
+
+
