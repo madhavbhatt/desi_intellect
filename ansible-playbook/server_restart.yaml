@@ -1,6 +1,0 @@
----
-- hosts: vpn
-  become: true
-  tasks:
-    - name: Reboot server
-      command: /sbin/reboot
