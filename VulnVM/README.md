@@ -1,1 +1,0 @@
-This is a ruby on rails bank application. It is work in progress but application is intended to be available with default rails configs which can be later tested for educational purposes for Pen Testing.
