@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 	@user = User.new(user_params)
 	if @user.save
 		log_in @user
-		flash[:success] = "Account creation successful! Welcome to Ruby Bank!"
+		flash[:success] = "Account creation successful! Welcome to the Bank of Bogus Transactions!"
 		redirect_to @user
 	else
 		render 'new'
