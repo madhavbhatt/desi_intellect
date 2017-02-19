@@ -8,6 +8,12 @@ group :development do
   gem 'annotate'
 end
 
+group :test do
+  gem 'factory_girl_rails', '1.4.0'
+  gem 'cucumber-rails', '1.2.1', require: false
+  gem 'database_cleaner', '0.7.0'
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.7.1'
 # Use sqlite3 as the database for Active Record
@@ -30,8 +36,15 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+# Use tzinfo-data
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
+
+#bootstrap gem
+gem 'bootstrap-sass', '~> 3.3.6'
+
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt-ruby', '~> 3.1.2'
+gem 'bcrypt', '~> 3.1.7'
 
 # Use Unicorn as the app server
 # gem 'unicorn'

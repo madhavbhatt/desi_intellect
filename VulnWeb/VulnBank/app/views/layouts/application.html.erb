@@ -1,14 +1,5 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>VulnBank</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
-
-<%= yield %>
-
-</body>
+<%= render 'layouts/head' %>
+<%= render 'layouts/body' %>
 </html>
