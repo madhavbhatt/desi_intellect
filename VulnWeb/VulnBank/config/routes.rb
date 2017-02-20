@@ -1,5 +1,29 @@
 Rails.application.routes.draw do
 
+  get 'transaction/index'
+
+  get 'transaction/new'
+
+  get 'transaction/create'
+
+  get 'transaction/edit'
+
+  get 'transaction/update'
+
+  get 'transaction/delete'
+
+  get 'account/index'
+
+  get 'account/new'
+
+  get 'account/create'
+
+  get 'account/edit'
+
+  get 'account/update'
+
+  get 'account/delete'
+
   get 'sessions/new'
 
 	root 'static_pages#home'

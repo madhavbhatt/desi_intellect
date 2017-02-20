@@ -1,0 +1,21 @@
+<h1>Transaction</h1>
+
+<% if admin? %>
+
+<% else %>
+    <div class = "row">
+      <div class = "col-md-6 col-md-offset-3">
+        <%= form_for(:session, url: transaction_new_path) do |f| %>
+            <%= f.label :Ammount %>
+            <%= f.to_enum :ammount, class: 'form-control' %>
+            <%= f.submit "Deposit", class: "btn btn-primary" %><br>
+            <%= f.submit "Withdraw", class: "btn btn-primary" %><br>
+            <%= f.submit "Transfer", class: "btn btn-primary" %><br>
+        <% end %>
+
+        <p>New user? <%= link_to "Create Account", signup_path %></p>
+      </div>
+    </div>
+<% end %>
+
+

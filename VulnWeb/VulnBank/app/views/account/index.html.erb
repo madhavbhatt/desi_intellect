@@ -1,0 +1,9 @@
+<h1>Accounts</h1>
+
+<% if admin? %>
+
+<% else %>
+	<h3><u><%= link_to "Request Account",{:controller => "account", :action => "new", :id => current_user.id} %></li></u></h3>
+<% end %>
+
+<p>Find me in app/views/account/index.html.erb</p>							

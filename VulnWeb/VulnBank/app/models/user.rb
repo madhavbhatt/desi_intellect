@@ -11,4 +11,12 @@ class User < ActiveRecord::Base
 		cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
 		BCrypt::Password.create(string, cost: cost)
 	end
+	
+	def self.search(search)
+		if search
+			where("name LIKE ? OR email LIKE ?", "%#{search}%", "%#{search}%")
+		else
+			[]
+		end
+	end
 end
