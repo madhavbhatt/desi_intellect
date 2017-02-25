@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Deposit History</h1>
+
+<table width="500">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Date</th>
+      <th>Amount</th>
+      <th colspan = 3>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+	<% @deposits.each do |deposit| %>
+	  <tr height="20">
+		<td><%= deposit.user_id %></td>
+		<td><%= deposit.date %></td>
+		<td>$<%= sprintf("%.2f",deposit.amount) %></td>
+		<td><%= deposit.status %></td>
+		<% if current_user.admin? %>
+			<td><%= link_to 'Approve', deposits_destroy_path(id: deposit.user_id) %></td>
+			<td><%= link_to 'Decline', edit_deposit_path(deposit) %></td>
+		<% else %>
+			<td><%= link_to 'Show', deposit %></td>
+			<td><%= link_to 'Destroy', deposit, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	  </tr>
+	 <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Deposit', new_deposit_path %>

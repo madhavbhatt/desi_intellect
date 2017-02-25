@@ -1,4 +1,4 @@
-User.create!(name: "Admin Test", email: "admin@test.com", password: "testing", password_confirmation: "testing", admin: true)
+User.create!(name: "Admin Test", email: "admin@test.com", password: "testing", password_confirmation: "testing", admin: true, master: true)
 
 User.create!(name: "Testing", email: "testing@test.com", password: "testing", password_confirmation: "testing")
 

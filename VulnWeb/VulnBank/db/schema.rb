@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170219212609) do
+ActiveRecord::Schema.define(version: 20170222055712) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "acct_number"
@@ -22,16 +22,28 @@ ActiveRecord::Schema.define(version: 20170219212609) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "friendships", force: :cascade do |t|
+  create_table "deposits", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "admin_id"
+    t.string   "status"
+    t.date     "date"
+    t.float    "amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "transactions", force: :cascade do |t|
-    t.decimal  "amount"
+  create_table "friendships", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.string   "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transfers", force: :cascade do |t|
     t.string   "from"
     t.string   "to"
-    t.string   "status"
+    t.float    "amount"
     t.date     "start"
     t.date     "effective"
     t.datetime "created_at", null: false
@@ -44,9 +56,18 @@ ActiveRecord::Schema.define(version: 20170219212609) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.string   "password_digest"
-    t.boolean  "admin",           default: false
+    t.boolean  "admin"
+    t.boolean  "master",          default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
+
+  create_table "withdrawals", force: :cascade do |t|
+    t.integer  "user_id"
+    t.date     "date"
+    t.float    "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end

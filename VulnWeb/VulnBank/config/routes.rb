@@ -1,40 +1,40 @@
 Rails.application.routes.draw do
 
-  get 'transaction/index'
-
-  get 'transaction/new'
-
-  get 'transaction/create'
-
-  get 'transaction/edit'
-
-  get 'transaction/update'
-
-  get 'transaction/delete'
-
-  get 'account/index'
-
-  get 'account/new'
-
-  get 'account/create'
-
-  get 'account/edit'
-
-  get 'account/update'
-
-  get 'account/delete'
-
-  get 'sessions/new'
+<<<<<<< HEAD
+	resources :users
+	resources :friendships
+	resources :accounts
+	resources :deposits
+  resources :transfers
+  resources :withdrawals
+=======
+	resources :transfers
+	resources :deposits
+	resources :transfers
+	resources :withdrawals
+	resources :transaction
+>>>>>>> 60044f35fb956411022edb285850bce55066f6eb
 
 	root 'static_pages#home'
 	get '/help', to: 'static_pages#help'
 	get '/about', to: 'static_pages#about'
 	get '/contact', to: 'static_pages#contact'
 	get '/signup', to: 'users#new'
+	get '/friends', to: 'users#friends'
+	get 'friendships/create'
+	get 'friendships/accept'
+	get 'friendships/decline'
+	get 'friendships/cancel'
+	get 'deposits/approve'
+	get 'deposits/destroy'
+	post '/accounts/activate/:id', to: 'accounts#activate'
+	post '/accounts/close/:id', to: 'accounts#close'
 	get '/login', to: 'sessions#new'
 	post '/login', to: 'sessions#create'
 	delete 'logout', to: 'sessions#destroy'
 	resources :users
+	resources :friendships
+	resources :accounts
 	
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -90,4 +90,5 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+	
 end

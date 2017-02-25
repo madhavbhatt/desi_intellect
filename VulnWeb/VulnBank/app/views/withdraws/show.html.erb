@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @withdraw.user_id %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @withdraw.date %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @withdraw.amount %>
+</p>
+
+<%= link_to 'Edit', edit_withdraw_path(@withdraw) %> |
+<%= link_to 'Back', withdraws_path %>

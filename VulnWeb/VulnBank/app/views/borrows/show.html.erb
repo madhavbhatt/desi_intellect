@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>From:</strong>
+  <%= @borrow.from %>
+</p>
+
+<p>
+  <strong>To:</strong>
+  <%= @borrow.to %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @borrow.date %>
+</p>
+
+<p>
+  <strong>Admin:</strong>
+  <%= @borrow.admin_id %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @borrow.status %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @borrow.amount %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @borrow.date %>
+</p>
+
+<%= link_to 'Edit', edit_borrow_path(@borrow) %> |
+<%= link_to 'Back', borrows_path %>

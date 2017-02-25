@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+	helper :friendship
+	
 	before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
 	before_action :correct_user, only: [:edit, :update]
 	before_action :is_admin?, only: [:destroy]
@@ -14,9 +16,14 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      log_in @user
-      flash[:success] = "Account creation successful! Welcome to the Bank of Bogus Transactions!"
-      redirect_to @user
+		if @user.admin?
+			flash[:success] = "New Administrator has been created!"
+			redirect_to root_url
+		else
+		  log_in @user
+		  flash[:success] = "Account creation successful! Welcome to the Bank of Bogus Transactions!"
+		  redirect_to @user
+		end
     else
       render 'new'
     end
@@ -37,9 +44,15 @@ class UsersController < ApplicationController
   end
   
   def destroy
-	User.find(params[:id]).destroy
-	flash[:success] = "User Deleted"
-	redirect_to users_url
+	@user = User.find(params[:id])
+	if @user.master?
+		flash[:danger] = "Failed: Cannot delete Master Admin!"
+		redirect_to current_user
+	else
+		User.find(params[:id]).destroy
+		flash[:success] = "User Deleted"
+		redirect_to users_url
+	end
   end
   
   def index
@@ -70,10 +83,19 @@ class UsersController < ApplicationController
 	end
   end
   
+  def friends
+	@users = []
+	Friendship.all.each do |friendship|
+		if friendship.user == current_user
+			@users.push(friendship.friend)
+		end
+	end
+  end
+  
   private
   
 	def user_params
-		params.require(:user).permit(:name, :email, :password, :password_confirmation)
+		params.require(:user).permit(:name, :email, :password, :password_confirmation, :admin)
 	end
 	
 	def logged_in_user

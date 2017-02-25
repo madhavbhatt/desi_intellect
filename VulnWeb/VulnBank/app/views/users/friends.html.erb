@@ -1,0 +1,22 @@
+<% provide(:title, 'Friends') %>
+<h1>Friends</h1>
+
+
+<%= form_tag(users_path, :method => "get", id: "search-form") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search Name or Email" %>
+    <%= submit_tag "Search", :name => nil %>
+<% end %>
+
+<% if @users.empty? %>
+	<!-- do nothing -->
+<% else %>
+	
+
+
+	<ul class = "users">
+		<%= render @users %>
+	</ul>
+	
+
+	
+<% end %>

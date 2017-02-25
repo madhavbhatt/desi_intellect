@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Withdrawal History</h1>
+
+<table width="500">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Date</th>
+      <th>Amount</th>
+      <th colspan="3">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @withdrawals.each do |withdrawal| %>
+      <tr height="20">
+        <td><%= withdrawal.user_id %></td>
+        <td><%= withdrawal.date %></td>
+        <td>$<%= sprintf("%.2f",withdrawal.amount) %></td>
+        <td><%= link_to 'Show', withdrawal %></td>
+        <td><%= link_to 'Edit', edit_withdrawal_path(withdrawal) %></td>
+        <td><%= link_to 'Destroy', withdrawal, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Withdrawal', new_withdrawal_path %>

@@ -1,0 +1,22 @@
+	<% if admin? %>
+		<h1>Bank Accounts</h1>
+	<% else %>
+		<h3><%= button_to "Request New Account",{:controller => "accounts", :action => "new"}, :method => :get, class: 'button' %></h3>
+	<% end %>
+<% unless current_accounts.empty? %>
+	<% unless admin? %>
+		<h4><u>My Accounts:</u></h4> <br>
+	<% end %>
+	<% @current_accounts.each do |a| %>
+	<b>
+		Account ID: <%= link_to a.acct_number, :action => :show, :id => a.id %> <br>
+		<% if admin? %>
+			Owner: <%= link_to get_user(a.owner)[0].name, :controller => "users", :action => :show, :id => a.owner, :function => "show" %> <br>
+		<% end %>
+		Balance: $<%= sprintf("%.2f",a.balance) %> <br>
+		Status: <%= a.status.upcase %> <br>
+		<hr>
+	</b>
+	<% end %>
+<% end %>
+

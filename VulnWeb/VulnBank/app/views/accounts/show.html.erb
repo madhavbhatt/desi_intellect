@@ -1,0 +1,48 @@
+<h1>View Account</h1>
+<div class = "row">
+	<section class = "account_info">
+		<% unless @account.status.upcase != "CLOSED" || admin? %>
+			<h2>Pending approval from Bank admin...</h2>
+		<% end %>
+		<b>
+			Account ID: <%= @account.acct_number %> <br>
+			<% if admin? %>
+				Owner: <%= link_to get_user(@account.owner)[0].name, :controller => "users", :action => :show, :id => @account.owner %> <br>
+			<% end %>
+			Balance: $<%= sprintf("%.2f",@account.balance) %> <br>
+			Status: <%= @account.status.upcase %> <br><br></b>
+			<b>Deposits:</b>
+			<ul>
+			<% Deposit.all.each do |d| %>
+				<% if d.user_id.to_s == @account.acct_number %>
+					<li><%= sprintf("$%.2f",d.amount)+" on "+d.date.to_s %></li>
+				<% end %>
+			<% end %>
+			</ul>
+			<b>Withdrawals:</b>
+			<ul>
+			<% Withdrawal.all.each do |w| %>
+				<% if w.user_id.to_s == @account.acct_number %>
+					<li><%= sprintf("$%.2f",w.amount)+" on "+w.date.to_s %></li>
+				<% end %>
+			<% end %>
+			</ul>
+			<b>Transfers:</b>
+			<ul>
+			<% Transfer.all.each do |t| %>
+				<% if t.to == @account.acct_number or t.from == @account.acct_number%>
+					<li><%= t.from+" payed "+t.to+sprintf(" $%.2f",w.amount)+" effective on "+t.effective.to_s %></li>
+				<% end %>
+			<% end %>
+			</ul><br>
+			<% if admin? %>
+				<b>
+				<%= button_to "Activate Account",{:controller => "accounts", :action => "activate"}, :method => :post, class: 'button' %>
+				<%= button_to "Close Account",{:controller => "accounts", :action => "close"}, :method => :post, class: 'button' %>
+				</b>
+			<% end %>
+				<br>
+		<%= link_to "Accounts", :action => :index %>
+	</section>
+	<br>
+</div>

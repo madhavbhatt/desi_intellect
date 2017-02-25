@@ -7,6 +7,11 @@ class User < ActiveRecord::Base
 	has_secure_password
 	validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 	
+	has_many :friendships
+	has_many :friends, through: :friendships, validate: "status = 'accepted'"
+	has_many :requested_friends, through: :friendships, source: :friend, validate: "status = 'requested'"
+	has_many :pending_friends, through: :friendships, source: :friend, validate: "status = 'pending'"
+	
 	def User.digest(string)
 		cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
 		BCrypt::Password.create(string, cost: cost)
