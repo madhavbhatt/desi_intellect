@@ -1,19 +1,17 @@
 Rails.application.routes.draw do
 
-<<<<<<< HEAD
 	resources :users
 	resources :friendships
 	resources :accounts
 	resources :deposits
   resources :transfers
   resources :withdrawals
-=======
+
 	resources :transfers
 	resources :deposits
 	resources :transfers
 	resources :withdrawals
 	resources :transaction
->>>>>>> 60044f35fb956411022edb285850bce55066f6eb
 
 	root 'static_pages#home'
 	get '/help', to: 'static_pages#help'
@@ -32,10 +30,7 @@ Rails.application.routes.draw do
 	get '/login', to: 'sessions#new'
 	post '/login', to: 'sessions#create'
 	delete 'logout', to: 'sessions#destroy'
-	resources :users
-	resources :friendships
-	resources :accounts
-	
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
