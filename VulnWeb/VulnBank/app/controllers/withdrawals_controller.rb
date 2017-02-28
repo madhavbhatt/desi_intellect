@@ -4,7 +4,12 @@ class WithdrawalsController < ApplicationController
   # GET /withdrawals
   # GET /withdrawals.json
   def index
-    @withdrawals = Withdrawal.all
+    @withdrawals = []
+    if current_user.admin?
+        @withdrawals = Withdrawal.all
+    else
+        @withdrawals = Withdrawal.find_by_sql("SELECT * FROM withdrawals WHERE user_id IN (SELECT acct_number FROM accounts WHERE owner = current_user)".gsub("current_user", current_user.id.to_s))
+    end
   end
 
   # GET /withdrawals/1
@@ -37,16 +42,9 @@ class WithdrawalsController < ApplicationController
       return
     end
     
-    if @withdrawal.amount >= 1000
-      flash[:danger] = "Withdrawal amount is greater than $1,000. Submitting to admin."
-      redirect_to "/withdrawals"
-      return
+    if @withdrawal.amount <= 1000
+      redirect_to "/withdrawals/approve"
     end
-    
-    @account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
-    new_balance = @account.balance -= @withdrawal.amount
-    Account.where(acct_number: @withdrawal.user_id).update_all(balance: new_balance)
-    @account.save
     
     respond_to do |format|
       if @withdrawal.save
@@ -72,6 +70,25 @@ class WithdrawalsController < ApplicationController
       end
     end
   end
+  
+  def approve
+       @account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
+       new_balance = @account.balance += @withdrawal.amount
+       Account.where(acct_number: @withdrawal.user_id).update_all(balance: new_balance)
+       @account.save
+              
+       Withdrawal.where(:id => params[:id]).update_all(status: 'APPROVED')
+       @withdrawal = Withdrawal.find(params[:id])
+       flash[:success] = "Approved Withdrawal"
+       redirect_to @withdrawal
+    end
+    
+ def decline
+  Withdrawal.where(:id => params[:id]).update_all(status: 'DECLINED')
+  @withdrawal = Withdrawal.find(params[:id])
+  flash[:success] = "Declined Withdrawal"
+  redirect_to @withdrawal
+ end
 
   # DELETE /withdrawals/1
   # DELETE /withdrawals/1.json

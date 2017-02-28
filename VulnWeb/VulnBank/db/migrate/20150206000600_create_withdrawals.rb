@@ -3,6 +3,7 @@ class CreateWithdrawals < ActiveRecord::Migration
     create_table :withdrawals do |t|
       t.integer :user_id
       t.integer :admin_id
+      t.string :status
       t.date :date
       t.float :amount
 

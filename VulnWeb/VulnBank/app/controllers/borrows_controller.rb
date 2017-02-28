@@ -24,8 +24,14 @@ class BorrowsController < ApplicationController
   # POST /borrows
   # POST /borrows.json
   def create
-    @borrow = Borrow.new(borrow_params)
-
+    @borrow = borrow.create(:acct_number => id,:status => "CLOSED",:balance => 0.00,:owner => current_user.id.to_s)
+    if @borrow.save
+      flash[:success] = "borrow Request Submitted"
+      redirect_to @borrow
+    else
+      flash[:danger] = @borrow.errors.full_messages
+      render 'index'
+    end
     respond_to do |format|
       if @borrow.save
         format.html { redirect_to @borrow, notice: 'Borrow was successfully created.' }
@@ -69,6 +75,6 @@ class BorrowsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def borrow_params
-      params.require(:borrow).permit(:from, :to, :date, :admin_id, :status, :amount, :date)
+      params.require(:borrow).permit(:user_id, :friend_id, :status, :date, :amount)
     end
 end

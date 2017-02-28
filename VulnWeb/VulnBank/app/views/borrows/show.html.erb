@@ -1,23 +1,13 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>From:</strong>
-  <%= @borrow.from %>
+  <strong>User:</strong>
+  <%= @borrow.user_id %>
 </p>
 
 <p>
-  <strong>To:</strong>
-  <%= @borrow.to %>
-</p>
-
-<p>
-  <strong>Date:</strong>
-  <%= @borrow.date %>
-</p>
-
-<p>
-  <strong>Admin:</strong>
-  <%= @borrow.admin_id %>
+  <strong>Friend:</strong>
+  <%= @borrow.friend_id %>
 </p>
 
 <p>
@@ -26,13 +16,13 @@
 </p>
 
 <p>
-  <strong>Amount:</strong>
-  <%= @borrow.amount %>
+  <strong>Date:</strong>
+  <%= @borrow.date %>
 </p>
 
 <p>
-  <strong>Date:</strong>
-  <%= @borrow.date %>
+  <strong>Amount:</strong>
+  <%= @borrow.amount %>
 </p>
 
 <%= link_to 'Edit', edit_borrow_path(@borrow) %> |
