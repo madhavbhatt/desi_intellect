@@ -11,9 +11,12 @@
 </p>
 
 <p>
-  <strong>Amount:</strong>
-  $<%= sprintf("%.2f",@withdrawal.amount) %>
+  <strong>Withdrawal Amount:</strong>
+  <% if @withdrawal.amount %>
+	$<%= sprintf("%.2f",@withdrawal.amount) %>
+  <% else %>
+	$<%= "0.00" %>
+  <% end %>
 </p>
 
-<%= link_to 'Edit', edit_withdrawal_path(@withdrawal) %> |
 <%= link_to 'Back', withdrawals_path %>

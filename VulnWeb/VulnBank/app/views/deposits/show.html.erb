@@ -11,9 +11,12 @@
 </p>
 
 <p>
-  <strong>Amount:</strong>
-  $<%= sprintf("%.2f",@deposit.amount) %>
+  <strong>Deposit Amount:</strong>
+  <% if @deposit.amount %>
+  	$<%= sprintf("%.2f",@deposit.amount) %>
+  <% else %>
+  	$<%= "0.00" %>
+  <% end %>
 </p>
 
-<%= link_to 'Edit', edit_deposit_path(@deposit) %> |
 <%= link_to 'Back', deposits_path %>

@@ -11,8 +11,12 @@
 </p>
 
 <p>
-  <strong>Amount:</strong>
-  <%= @transfer.amount %>
+  <strong>Transfer Amount:</strong>
+  <% if @transfer.amount %>
+	$<%= sprintf("%.2f",@transfer.amount) %>
+  <% else %>
+	$<%= "0.00" %>
+  <% end %>
 </p>
 
 <p>
@@ -25,5 +29,4 @@
   <%= @transfer.effective %>
 </p>
 
-<%= link_to 'Edit', edit_transfer_path(@transfer) %> |
 <%= link_to 'Back', transfers_path %>

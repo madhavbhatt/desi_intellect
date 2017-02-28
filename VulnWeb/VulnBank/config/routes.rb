@@ -1,19 +1,12 @@
 Rails.application.routes.draw do
 
-<<<<<<< HEAD
 	resources :users
 	resources :friendships
 	resources :accounts
 	resources :deposits
-  resources :transfers
-  resources :withdrawals
-=======
-	resources :transfers
-	resources :deposits
 	resources :transfers
 	resources :withdrawals
 	resources :transaction
->>>>>>> 60044f35fb956411022edb285850bce55066f6eb
 
 	root 'static_pages#home'
 	get '/help', to: 'static_pages#help'
@@ -25,10 +18,14 @@ Rails.application.routes.draw do
 	get 'friendships/accept'
 	get 'friendships/decline'
 	get 'friendships/cancel'
-	get 'deposits/approve'
-	get 'deposits/destroy'
 	post '/accounts/activate/:id', to: 'accounts#activate'
 	post '/accounts/close/:id', to: 'accounts#close'
+  get '/deposits/approve/:id', to: 'deposits#approve'
+  get '/deposits/decline/:id', to: 'deposits#decline'
+  get '/withdrawals/approve/:id', to: 'withdrawals#approve'
+  get '/withdrawals/decline/:id', to: 'withdrawals#decline'
+  get '/transfers/approve/:id', to: 'transfers#approve'
+  get '/transfers/decline/:id', to: 'transfers#decline'
 	get '/login', to: 'sessions#new'
 	post '/login', to: 'sessions#create'
 	delete 'logout', to: 'sessions#destroy'

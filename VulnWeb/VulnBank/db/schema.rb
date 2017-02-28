@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(version: 20170222055712) do
   create_table "transfers", force: :cascade do |t|
     t.string   "from"
     t.string   "to"
+    t.integer  "admin_id"
+    t.string   "status"
     t.float    "amount"
     t.date     "start"
     t.date     "effective"
@@ -64,6 +66,8 @@ ActiveRecord::Schema.define(version: 20170222055712) do
 
   create_table "withdrawals", force: :cascade do |t|
     t.integer  "user_id"
+    t.integer  "admin_id"
+    t.string   "status"
     t.date     "date"
     t.float    "amount"
     t.datetime "created_at", null: false

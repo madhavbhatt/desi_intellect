@@ -5,7 +5,12 @@ class DepositsController < ApplicationController
                   # GET /deposits
   # GET /deposits.json
   def index
-    @deposits = Deposit.all
+    @deposits = []
+    if current_user.admin?
+        @deposits = Deposit.all
+    else
+        @deposits = Deposit.find_by_sql("SELECT * FROM deposits WHERE user_id IN (SELECT acct_number FROM accounts WHERE owner = current_user)".gsub("current_user", current_user.id.to_s))
+    end
   end
 
   # GET /deposits/1
@@ -38,11 +43,6 @@ class DepositsController < ApplicationController
       return
     end
     
-    @account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @deposit.user_id.to_s))[0]
-    new_balance = @account.balance += @deposit.amount
-    Account.where(acct_number: @deposit.user_id).update_all(balance: new_balance)
-    @account.save
-        
     respond_to do |format|
       if @deposit.save
         format.html { redirect_to @deposit, notice: 'Your request  has been sent. Pending Approval from the admin.' }
@@ -55,10 +55,23 @@ class DepositsController < ApplicationController
   end
   
   def approve
-	@balance += User.amount
-	Deposit.accept(@user, @friend)
-	flash[:success] = "You have approved the deposit."
+     @account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @deposit.user_id.to_s))[0]
+     new_balance = @account.balance += @deposit.amount
+     Account.where(acct_number: @deposit.user_id).update_all(balance: new_balance)
+     @account.save
+            
+     Deposit.where(:id => params[:id]).update_all(status: 'APPROVED')
+     @deposit = Deposit.find(params[:id])
+     flash[:success] = "Approved Deposit"
+     redirect_to @deposit
   end
+  
+  def decline
+   Deposit.where(:id => params[:id]).update_all(status: 'DECLINED')
+   @deposit = Deposit.find(params[:id])
+   flash[:success] = "Declined Deposit"
+   redirect_to @deposit
+ end
 
   # PATCH/PUT /deposits/1
   # PATCH/PUT /deposits/1.json
