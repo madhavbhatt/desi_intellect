@@ -11,3 +11,4 @@ class CreateDeposits < ActiveRecord::Migration
     end
   end
 end
+

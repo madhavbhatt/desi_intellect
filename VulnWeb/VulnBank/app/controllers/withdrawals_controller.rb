@@ -1,5 +1,5 @@
 class WithdrawalsController < ApplicationController
-  before_action :set_withdrawal, only: [:show, :edit, :update, :destroy]
+  before_action :set_withdrawal, only: [:show, :edit, :update, :destroy, :approve]
 
   # GET /withdrawals
   # GET /withdrawals.json
@@ -30,9 +30,16 @@ class WithdrawalsController < ApplicationController
   # POST /withdrawals.json
   def create
     @withdrawal = Withdrawal.new(withdrawal_params)
-    if @withdrawal.nil?
+	@account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
+    if @withdrawal.nil? || @withdrawal.amount < 0
       flash[:danger] = "No withdrawal request passed to controller"
-    else
+	  redirect_to :back
+	  return
+    elsif @withdrawal.amount >= @account.balance
+		flash[:danger] = "Insufficient Balance"
+		redirect_to :back
+		return
+	else
       Withdrawal.request(@user, @admin)
     end
     
@@ -41,20 +48,33 @@ class WithdrawalsController < ApplicationController
       redirect_to "/withdrawals/new"
       return
     end
-    
-    if @withdrawal.amount <= 1000
-      redirect_to "/withdrawals/approve"
-    end
+	
+	if @withdrawal.amount <= 0
+		flash[:danger] = "Your requested withdrawal must be a positive number! Stop trying to rob us!"
+		redirect_to :back
+		return
+	end
+	
     
     respond_to do |format|
-      if @withdrawal.save
-        format.html { redirect_to @withdrawal, notice: 'Your request  has been sent. Pending Approval from the admin.' }
-        format.json { render :show, status: :created, location: @withdrawal }
-      else
-        format.html { render :new }
-        format.json { render json: @withdrawal.errors, status: :unprocessable_entity }
-      end
-    end
+		  if @withdrawal.save
+			if @withdrawal.amount <= 1000
+				@withdrawal.update(status: 'APPROVED')
+				@account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
+				new_balance = @account.balance -= @withdrawal.amount
+				Account.where(acct_number: @withdrawal.user_id).update_all(balance: new_balance)
+				@account.save
+				format.html { redirect_to @withdrawal, notice: 'Your request has been approved.' }
+				format.json { render :show, status: :created, location: @withdrawal }
+			else 
+				format.html { redirect_to @withdrawal, notice: 'Your request  has been sent. Pending Approval from the admin.' }
+				format.json { render :show, status: :created, location: @withdrawal }
+			end
+		  else
+			format.html { render :new }
+			format.json { render json: @withdrawal.errors, status: :unprocessable_entity }
+		  end
+	end
   end
 
   # PATCH/PUT /withdrawals/1
@@ -73,7 +93,7 @@ class WithdrawalsController < ApplicationController
   
   def approve
        @account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
-       new_balance = @account.balance += @withdrawal.amount
+       new_balance = @account.balance -= @withdrawal.amount
        Account.where(acct_number: @withdrawal.user_id).update_all(balance: new_balance)
        @account.save
               

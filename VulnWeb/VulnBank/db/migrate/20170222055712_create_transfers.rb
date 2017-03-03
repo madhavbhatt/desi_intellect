@@ -8,8 +8,11 @@ class CreateTransfers < ActiveRecord::Migration
       t.float :amount
       t.date :start
       t.date :effective
+	  t.string :sender
+	  t.string :recipient
 
       t.timestamps null: false
     end
   end
 end
+

@@ -13,7 +13,7 @@
 
   <div class="field">
     <%= f.label "Account" %>
-    <%= f.select :user_id, current_accounts.select{|x| x.status == "ACTIVE"}.collect{|x| x.acct_number} %>
+    <%= f.select :user_id, current_accounts.select{|x| x.status == "active" || x.status == "ACTIVE" }.collect{|x| x.acct_number} %>
   </div>
   <div class="field">
     <%= f.label :date %><br>

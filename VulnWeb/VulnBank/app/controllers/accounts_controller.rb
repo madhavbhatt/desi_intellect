@@ -5,7 +5,7 @@ class AccountsController < ApplicationController
     if current_user.admin?
         @accounts = Account.all
     else
-        @accounts = Account.find_by_sql("SELECT * FROM accounts WHERE owner = name".gsub("name", current_user.id.to_s))
+        @accounts = current_accounts
     end
     if @accounts.empty?
       flash.now[:danger] = "No Accounts Found"
@@ -56,7 +56,7 @@ class AccountsController < ApplicationController
   
   #Account IDs are unique 9 digit numbers
   def get_account_id
-    num = rand(999999999)
+    num = rand(111111111..999999999)
     id = sprintf("%09d", num)
     id.to_s
   end

@@ -8,6 +8,7 @@
 			<% friends = Friendship.find_by_user_id_and_friend_id(current_user, user) %>
 			<% if friends %>
 				<% if friends.status == 'accepted' %>
+					| <%= link_to "Borrow Request", new_borrow_path(id: current_user.id, friend_id: user) %>
 					| <%= link_to "Remove Friend", friendships_cancel_path(friend_param: user) %>
 				<% elsif friends.status == 'pending' %>
 					| <%= link_to "Accept", friendships_accept_path(friend_param: user) %> 

@@ -1,0 +1,16 @@
+class Transfer < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :friend, class_name: "User", foreign_key: "friend_id"
+
+  validates :from, presence: true
+  validates :to, presence: true
+
+  def self.request(user, friend)
+    unless user == friend
+      transaction do
+        create(from: user, to: friend, status: 'sent')
+		create(from: friend, to: user, status: 'recieved')
+      end
+    end
+  end
+end

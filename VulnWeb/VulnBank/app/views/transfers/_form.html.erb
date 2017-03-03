@@ -13,11 +13,11 @@
 
    <div class="field">
     <%= f.label :from %>
-    <%= f.select :from, current_accounts.select{|x| x.status == "ACTIVE"}.collect{|x| x.acct_number} %>
+    <%= f.select :from, current_accounts.select{|x| x.status == "active" || x.status == "ACTIVE" }.collect{|x| x.acct_number} %>
   </div>
   <div class="field">
     <%= f.label :to %><br>
-    <%= f.select :to, Account.all.select{|x| x.owner.in?(current_user.friends)}.select{|x| x.status == "ACTIVE"}.collect{|x| x.acct_number} %>
+	<%= f.select :to, Account.all.select{|x| Friendship.exists?(current_user, User.find(x.owner.to_i)) }.collect{|x| x.acct_number } %>
   </div>
   <div class="field">
     <%= f.label :amount %><br>

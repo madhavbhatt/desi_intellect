@@ -9,7 +9,7 @@ class DepositsController < ApplicationController
     if current_user.admin?
         @deposits = Deposit.all
     else
-        @deposits = Deposit.find_by_sql("SELECT * FROM deposits WHERE user_id IN (SELECT acct_number FROM accounts WHERE owner = current_user)".gsub("current_user", current_user.id.to_s))
+        @deposits = Deposit.where(user_id: current_accounts.collect{|x| x.acct_number})
     end
   end
 
@@ -31,8 +31,10 @@ class DepositsController < ApplicationController
   # POST /deposits.json
   def create
     @deposit = Deposit.new(deposit_params) 
-    if @deposit.nil?
+    if @deposit.nil? || @deposit.amount < 0
       flash[:danger] = "No Deposit request passed to controller"
+	  redirect_to :back
+	  return
     else
       Deposit.request(@user, User.find(1))
     end

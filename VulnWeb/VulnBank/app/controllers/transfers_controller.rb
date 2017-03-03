@@ -1,10 +1,16 @@
 class TransfersController < ApplicationController
   before_action :set_transfer, only: [:show, :edit, :update, :destroy]
+  before_filter :setup_transfer, only: [:create, :update, :destroy, :approve]
 
   # GET /transfers
   # GET /transfers.json
   def index
-    @transfers = Transfer.all
+    @transfers = []
+    if current_user.admin?
+        @transfers = Transfer.all
+    else
+        @transfers = Transfer.where(from: current_accounts.collect{|x| x.acct_number}) + Transfer.where(to: current_accounts.collect{|x| x.acct_number})      
+    end
   end
 
   # GET /transfers/1
@@ -24,13 +30,17 @@ class TransfersController < ApplicationController
   # POST /transfers
   # POST /transfers.json
   def create
-    @transfer = Transfer.new(transfer_params)
-    # @balance -= User.amount
-    if @transfer.nil?
-      flash[:danger] = "No Deposit request passed to controller"
-    else
-      Transfer.request(@user, @admin)
-    end
+    @transfer = Transfer.request(transfer_params, @user.name, @friend.name)
+    @from_account = Account.find_by_acct_number(params[:transfer][:from])
+    if @transfer.nil? || @transfer.amount < 0
+      flash[:danger] = "Invalid Transfer Amount"
+	  redirect_to :back
+	  return
+    elsif @transfer.amount >= @from_account.balance
+		flash[:danger] = "Insufficient Balance"
+		redirect_to :back
+		return
+	end
     
     if @transfer.to.nil? || @transfer.to == ""
       flash[:danger] = "Invalid Transfer: No Participant"
@@ -38,15 +48,20 @@ class TransfersController < ApplicationController
       return
     end
     
-    if @transfer.amount.nil?
-      flash[:danger] = "Invalid Transfer: No Amount"
-      redirect_to "/transfers/new"
-      return
-    end
-    
     respond_to do |format|
       if @transfer.save
-        format.html { redirect_to @transfer, notice: 'Your request  has been sent. Pending Approval from the admin.' }
+		@to_account = Account.find_by_acct_number(params[:transfer][:to])
+		new_balance = @to_account.balance += @transfer.amount
+		Account.where(acct_number: @transfer.to).update_all(balance: new_balance)
+		@to_account.save
+		
+		@from_account = Account.find_by_acct_number(params[:transfer][:from])
+		new_balance2 = @from_account.balance -= @transfer.amount
+		Account.where(acct_number: @transfer.from).update_all(balance: new_balance2)
+		@from_account.save
+			  
+		flash[:success] = "Approved Transfer"
+        format.html { redirect_to @transfer, notice: 'Your transfer has been successfully processed.' }
         format.json { render :show, status: :created, location: @transfer }
       else
         format.html { render :new }
@@ -66,10 +81,10 @@ class TransfersController < ApplicationController
     Account.where(acct_number: @transfer.from).update_all(balance: new_balance2)
     @from_account.save
           
-   Transfer.where(:id => params[:id]).update_all(status: 'APPROVED')
-   @transfer = Transfer.find(params[:id])
-   flash[:success] = "Approved Transfer"
-   redirect_to @transfer
+    Transfer.where(:id => params[:id]).update_all(status: 'APPROVED')
+    @transfer = Transfer.find(params[:id])
+    flash[:success] = "Approved Transfer"
+    redirect_to @transfer
  end
  
  def decline
@@ -114,8 +129,8 @@ class TransfersController < ApplicationController
       params.require(:transfer).permit(:from, :to, :amount, :start, :effective)
     end
 
-    def setup_deposit
+    def setup_transfer
       @user = User.find(session[:user_id])
-      @admin = User.find(1)
+      @friend = User.find(Account.find_by_acct_number(params[:transfer][:to]).owner.to_i)
     end
 end

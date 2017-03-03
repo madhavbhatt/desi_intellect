@@ -2,22 +2,22 @@
 
 <p>
   <strong>User:</strong>
-  <%= @borrow.user_id %>
+  <%= @borrow.requestor %>
+</p>
+
+<p>
+	<strong>To Account: </strong>
+	<%= @borrow.to_account %>
 </p>
 
 <p>
   <strong>Friend:</strong>
-  <%= @borrow.friend_id %>
+  <%= @borrow.requestee %>
 </p>
 
 <p>
-  <strong>Status:</strong>
-  <%= @borrow.status %>
-</p>
-
-<p>
-  <strong>Date:</strong>
-  <%= @borrow.date %>
+	<strong>From Account: </strong>
+	<%= @borrow.from_account %>
 </p>
 
 <p>
@@ -25,5 +25,18 @@
   <%= @borrow.amount %>
 </p>
 
-<%= link_to 'Edit', edit_borrow_path(@borrow) %> |
-<%= link_to 'Back', borrows_path %>
+<p>
+  <strong>Status:</strong>
+  <%= @borrow.status %>
+</p>
+
+
+<% if @borrow.status == "pending" %>
+	<% if @borrow.requestor == current_user.name %>
+		<%= link_to "Cancel", :controller => :borrows, :action => :destroy, data: { confirm: 'Are you sure?' } %>
+	<% else %>
+		<%= link_to "Accept", :controller => :borrows, :action => :accept, :id => borrow.id %>
+		<%= link_to "Decline", :controller => :borrows, :action => :decline, :id => borrow.id %>
+	<% end %>
+<% end %>
+<%= link_to 'Back', root_path %>

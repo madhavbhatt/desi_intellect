@@ -11,3 +11,4 @@ class CreateWithdrawals < ActiveRecord::Migration
     end
   end
 end
+

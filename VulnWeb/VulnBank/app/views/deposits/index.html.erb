@@ -15,21 +15,23 @@
 
   <tbody>
 	<% @deposits.each do |deposit| %>
-	  <tr height="20">
-		<td><%= deposit.user_id %></td>
-		<td><%= deposit.date %></td>
-		<% if deposit.amount %>
-			<td>$<%= sprintf("%.2f",deposit.amount) %></td>
-		<% else %>
-			<td>$<%= "0.00" %></td>
-		<% end %>
-		<td><%= deposit.status %></td>
-		<% if current_user.admin? %>
-			<td><u><%= link_to "Approve",:controller => :deposits, :action => :approve, :id => deposit.id %></u></td>
-			<td><u><%= link_to "Decline",:controller => :deposits, :action => :decline, :id => deposit.id %></u></td>
-		<% else %>
-			<td><u><%= link_to 'Show', deposit %><u></td>
-			<td><u><%= link_to 'Destroy', deposit, method: :delete, data: { confirm: 'Are you sure?' } %></u></td>
+		<% if deposit.user_id.to_s.length == 9 %>
+		  <tr height="20">
+			<td><%= deposit.user_id %></td>
+			<td><%= deposit.date %></td>
+			<% if deposit.amount %>
+				<td>$<%= sprintf("%.2f",deposit.amount) %></td>
+			<% else %>
+				<td>$<%= "0.00" %></td>
+			<% end %>
+			<td><%= deposit.status %></td>
+			<% if current_user.admin? %>
+				<td><u><%= link_to "Approve",:controller => :deposits, :action => :approve, :id => deposit.id %></u></td>
+				<td><u><%= link_to "Decline",:controller => :deposits, :action => :decline, :id => deposit.id %></u></td>
+			<% else %>
+				<td><u><%= link_to 'Show', deposit %><u></td>
+				<td><u><%= link_to 'Destroy', deposit, method: :delete, data: { confirm: 'Are you sure?' } %></u></td>
+			<% end %>
 		<% end %>
 	  </tr>
     <% end %>

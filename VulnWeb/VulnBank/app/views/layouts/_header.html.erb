@@ -17,7 +17,9 @@
 								<li><%= link_to "Deposits",{:controller => "deposits", :action => "index", :id => current_user.id} %></li>
 								<li><%= link_to "Withdrawals", {:controller => "withdrawals", :action => "index", :id => current_user.id} %></li>
 								<li><%= link_to "Transfers", {:controller => "transfers", :action => "index", :id => current_user.id} %></li>
-	            			</ul> 
+								<li><%= link_to "Borrows", {:controller => "borrows", :action => "index", :id => current_user.id} %></li>
+	            			</ul>
+						</li>
 					<% else %>
 						<li><%= link_to "Search", users_path %></li>
 						<li><%= link_to "Friends", friends_path %></li>
@@ -30,6 +32,7 @@
 								<li><%= link_to "Deposits",{:controller => "deposits", :action => "index", :id => current_user.id} %></li>
 								<li><%= link_to "Withdrawals", {:controller => "withdrawals", :action => "index", :id => current_user.id} %></li>
 								<li><%= link_to "Transfers", {:controller => "transfers", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Borrows", {:controller => "borrows", :action => "index", :id => current_user.id} %></li>
 	            			</ul>
 						</li>
 					<% end %>
