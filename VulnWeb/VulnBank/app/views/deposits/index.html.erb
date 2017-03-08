@@ -26,10 +26,14 @@
 			<% end %>
 			<td><%= deposit.status %></td>
 			<% if current_user.admin? %>
-				<td><u><%= link_to "Approve",:controller => :deposits, :action => :approve, :id => deposit.id %></u></td>
-				<td><u><%= link_to "Decline",:controller => :deposits, :action => :decline, :id => deposit.id %></u></td>
+				<% if deposit.status == "APPROVED" || deposit.status == "DECLINED" %>
+					<td><u><%= link_to 'Show', deposit %></u></td>
+				<% else %>
+					<td><u><%= link_to "Approve",:controller => :deposits, :action => :approve, :id => deposit.id %></u></td>
+					<td><u><%= link_to "Decline",:controller => :deposits, :action => :decline, :id => deposit.id %></u></td>
+				<% end %>
 			<% else %>
-				<td><u><%= link_to 'Show', deposit %><u></td>
+				<td><u><%= link_to 'Show', deposit %></u></td>
 				<td><u><%= link_to 'Destroy', deposit, method: :delete, data: { confirm: 'Are you sure?' } %></u></td>
 			<% end %>
 		<% end %>

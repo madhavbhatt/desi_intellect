@@ -1,3 +1,5 @@
+Quick Note: This Repository was used specifically for modifying our app to work through heroku. The other repository shows our full commit history.
+
 # Bank of Bogus Transactions
 CSC/ECE 517: Object Oriented Design and Development
 

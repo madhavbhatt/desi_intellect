@@ -44,8 +44,7 @@
 				<td width = "175" ><%= transfer.status %></td>
 				<td width = "175" ><%= transfer.start %></td>
 				<td width = "175" ><%= transfer.effective %></td>
-				<td><u><%= link_to "Approve",:controller => :transfers, :action => :approve, :id => transfer.id %></td>
-				<td><u><%= link_to "Decline",:controller => :transfers, :action => :decline, :id => transfer.id %></td>
+				<td><u><%= link_to 'Show', transfer %></td>
 
 			</tr>
 		<% end %>

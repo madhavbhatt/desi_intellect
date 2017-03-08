@@ -57,7 +57,8 @@ class DepositsController < ApplicationController
   end
   
   def approve
-     @account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @deposit.user_id.to_s))[0]
+     @account = Account.select{|x| x.acct_number == @deposit.user_id.to_s }[0]
+	 #Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @deposit.user_id.to_s))[0]
      new_balance = @account.balance += @deposit.amount
      Account.where(acct_number: @deposit.user_id).update_all(balance: new_balance)
      @account.save

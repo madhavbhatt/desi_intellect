@@ -8,7 +8,8 @@ class WithdrawalsController < ApplicationController
     if current_user.admin?
         @withdrawals = Withdrawal.all
     else
-        @withdrawals = Withdrawal.find_by_sql("SELECT * FROM withdrawals WHERE user_id IN (SELECT acct_number FROM accounts WHERE owner = current_user)".gsub("current_user", current_user.id.to_s))
+        @withdrawals = Withdrawal.where(user_id: current_accounts.collect{|x| x.acct_number})
+		#Withdrawal.find_by_sql("SELECT * FROM withdrawals WHERE user_id IN (SELECT acct_number FROM accounts WHERE owner = current_user)".gsub("current_user", current_user.id.to_s))
     end
   end
 
@@ -30,7 +31,8 @@ class WithdrawalsController < ApplicationController
   # POST /withdrawals.json
   def create
     @withdrawal = Withdrawal.new(withdrawal_params)
-	@account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
+	@account = Account.select{|x| x.acct_number == @withdrawal.user_id.to_s }[0]
+	#Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
     if @withdrawal.nil? || @withdrawal.amount < 0
       flash[:danger] = "No withdrawal request passed to controller"
 	  redirect_to :back
@@ -60,7 +62,8 @@ class WithdrawalsController < ApplicationController
 		  if @withdrawal.save
 			if @withdrawal.amount <= 1000
 				@withdrawal.update(status: 'APPROVED')
-				@account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
+				@account = Account.select{|x| x.acct_number == @withdrawal.user_id.to_s }[0]
+				#Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
 				new_balance = @account.balance -= @withdrawal.amount
 				Account.where(acct_number: @withdrawal.user_id).update_all(balance: new_balance)
 				@account.save
@@ -92,7 +95,8 @@ class WithdrawalsController < ApplicationController
   end
   
   def approve
-       @account = Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
+       @account = Account.select{|x| x.acct_number == @withdrawal.user_id.to_s }[0]
+	   #Account.find_by_sql("SELECT * FROM accounts WHERE acct_number = id".gsub("id", @withdrawal.user_id.to_s))[0]
        new_balance = @account.balance -= @withdrawal.amount
        Account.where(acct_number: @withdrawal.user_id).update_all(balance: new_balance)
        @account.save

@@ -7,7 +7,7 @@
 		<b>
 			Account ID: <%= @account.acct_number %> <br>
 			<% if admin? %>
-				Owner: <%= link_to get_user(@account.owner)[0].name, :controller => "users", :action => :show, :id => @account.owner %> <br>
+				Owner: <%= link_to get_user(@account.owner).name, :controller => "users", :action => :show, :id => @account.owner %> <br>
 			<% end %>
 			Balance: $<%= sprintf("%.2f",@account.balance) %> <br>
 			Status: <%= @account.status.upcase %> <br><br></b>

@@ -59,6 +59,8 @@ ActiveRecord::Schema.define(version: 20170301203911) do
     t.float    "amount"
     t.date     "start"
     t.date     "effective"
+    t.string   "sender"
+    t.string   "recipient"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

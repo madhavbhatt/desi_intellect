@@ -18,12 +18,12 @@ module SessionsHelper
 	  if admin?
 	    @current_accounts ||= Account.all.to_a
 	  else 
-      @current_accounts ||= Account.find_by_sql("SELECT * FROM accounts WHERE owner = name".gsub("name", current_user.id.to_s))
+      @current_accounts ||= Account.select{|x| x.owner == current_user.id.to_s }
     end
 	end
 	
 	def get_user(id)
-	  User.find_by_sql("SELECT * FROM users WHERE id = number".gsub("number",id.to_s))
+	  User.find(id.to_i)
 	end
 	
 	def logged_in?

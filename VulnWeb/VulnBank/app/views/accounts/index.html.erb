@@ -11,7 +11,7 @@
 	<b>
 		Account ID: <%= link_to a.acct_number, :action => :show, :id => a.id %> <br>
 		<% if admin? %>
-			Owner: <%= link_to get_user(a.owner)[0].name, :controller => "users", :action => :show, :id => a.owner, :function => "show" %> <br>
+			Owner: <%= link_to get_user(a.owner).name, :controller => "users", :action => :show, :id => a.owner, :function => "show" %> <br>
 		<% end %>
 		Balance: $<%= sprintf("%.2f",a.balance) %> <br>
 		Status: <%= a.status.upcase %> <br>
