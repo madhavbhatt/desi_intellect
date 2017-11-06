@@ -1,16 +1,6 @@
 # desi_intellect
 
-This project is focused mostly on two things
-
-(i) Cyber Security
-(ii) Aritificial Intelligence. 
-
-(i) exploits will give you utility to create payloads. You would have to do some of your own digging in order to exploit the system. 
-
-(ii) At present my goal is to integrate linux terminal with voice automated commands so that it would be easy to administer it. Currently I am creating desi_jarvis utility that would reduce the administration burden. This would also      be heavily focused towards security.
-
-
-
+This project is focused mostly cyber security. Exploits will give you utility to create payloads. You would have to do some of your own digging in order to exploit the system. 
 
 [!] LEGAL DISCLAIMER: 
 
