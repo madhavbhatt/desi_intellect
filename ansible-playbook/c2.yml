@@ -1,0 +1,40 @@
+---
+- hosts: 152.46.20.70
+  become: true
+
+  tasks:
+     - name: create file ifcfg-eth0:22
+       blockinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth0:22
+        block: |
+          DEVICE=eth0:22
+          BOOTPROTO=static
+          ONBOOT=yes    
+          TYPE="Ethernet"
+          IPADDR=192.168.3.1
+          NETMASK=255.255.255.0
+          NETWORK=192.168.3.0
+
+     - name: Restarting Serivces
+       service: name=networking state=restarted
+
+
+- hosts: 152.46.20.152
+  become: true
+  
+  tasks:
+     - name: create file ifcfg-eth0:22
+       blockinfile:
+        dest: /etc/sysconfig/network-scripts/ifcfg-eth0:22
+        block: |
+          DEVICE=eth0:22
+          BOOTPROTO=static
+          ONBOOT=yes    
+          TYPE="Ethernet"
+          IPADDR=192.168.3.2
+          NETMASK=255.255.255.0
+          NETWORK=192.168.3.0
+     
+     - name: Restarting Serivces
+       service: name=networking state=restarted
+

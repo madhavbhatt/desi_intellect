@@ -1,5 +1,7 @@
----
-- hosts: vpn
+---       apt: name={{ item }} state=latest
+       with_items:
+
+- hosts: geni
   become: true
   tasks:
     - name: Upgrade all packages in RedHat-based machines
@@ -11,3 +13,8 @@
       apt: 
         upgrade: dist
         update_cache: yes
+
+    - name: Install Oracle JDK 7
+      apt: name={{ item }} state=latest
+      with_items:
+        - oracle-jdk7-installer

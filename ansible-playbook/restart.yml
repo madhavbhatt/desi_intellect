@@ -1,5 +1,5 @@
 ---
-- hosts: web-servers
+- hosts: vpn
   become: true
   vars:
     packages: [ 'apache2', 'mysql']
