@@ -20,24 +20,28 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '24(p24%5!xh5-ted)05u6@_3495a0waxftnx8#q-%ye03x(3*c'
+SECRET_KEY = 'p(rg90u7uq)b+9&)lj5oz(prwmv%jy%@8_qeza1+b_bt255a&g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    'exploits.apps.ExploitsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'exploitscanner',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +59,8 @@ ROOT_URLCONF = 'desi_intellect.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS' : '',
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
