@@ -1,0 +1,5 @@
+host;hostname;hostname_type;protocol;port;name;state;product;extrainfo;reason;version;conf;cpe
+192.168.0.1;;;tcp;80;tcpwrapped;open;;;syn-ack;;10;
+192.168.0.1;;;tcp;139;netbios-ssn;closed;;;reset;;3;
+192.168.0.1;;;tcp;445;microsoft-ds;closed;;;reset;;3;
+192.168.0.1;;;tcp;1900;http;open;Cisco DPC3828S WiFi cable modem;;syn-ack;;10;cpe:/h:cisco:dpc3828s
