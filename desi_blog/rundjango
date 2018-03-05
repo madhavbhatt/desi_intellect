@@ -1,2 +1,0 @@
-#!/bin/bash
-python manage.py runsslserver --certificate /home/malware/Documents/cert/desi-blog-selfsigned.crt --key /home/malware/Documents/cert/desi-blog-selfsigned.key 0.0.0.0:443
