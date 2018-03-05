@@ -1,13 +1,3 @@
-# desi_intellect
+This is a simple blog web app. In order for registration function to work you need to enter your mail server details in settings.py file. Plan to put registration disabling functionality since this site is intended for solo / heavily administered blogging ( Besides, django already provides admin a functionality to add users ).
 
-This project is focused mostly cyber security. Exploits will give you utility to create payloads. You would have to do some of your own digging in order to exploit the system. 
-
-[!] LEGAL DISCLAIMER: 
-
-    THE SOFTWAREW IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-    IN NO  EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
-    THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE PRODUCT.
-
-    USAGE OF THESE EXPLOITS FOR ATTACKING TARGETS WITHOUT PRIOR MUTUAL CONSENT IS ILLEGAL. IT IS THE END USER'S RESPONSIBILITY TO OBEY ALL APPLICABLE LOCAL, STATE AND FEDERAL LAWS. DEVELOPERS ASSUME NO
-    LIABILITY  AND ARE NOT RESPONSIBLE FOR ANY MISUSE OR DAMAGE CAUSED BY THIS PROGRAM.
-    
+The password reset functionality may have a replay attack ( if the link gets compromised , it cam be re used. I have not tested yet. )
