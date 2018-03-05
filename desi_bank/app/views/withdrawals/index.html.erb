@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Withdrawal History</h1>
+
+<table width="500">
+  <thead>
+    <tr>
+      <th>Account</th>
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th colspan="2">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @withdrawals.each do |withdrawal| %>
+      <tr height="20">
+        <td><%= withdrawal.user_id %></td>
+        <td><%= withdrawal.date %></td>
+        <% if withdrawal.amount %>
+			<td>$<%= sprintf("%.2f",withdrawal.amount) %></td>
+		<% else %>
+			<td>$<%= "0.00" %></td>
+		<% end %>
+		<td><%= withdrawal.status %></td>
+        <% if current_user.admin? %>
+			<td><u><%= link_to "Approve",:controller => :withdrawals, :action => :approve, :id => withdrawal.id %></td>
+			<td><u><%= link_to "Decline",:controller => :withdrawals, :action => :decline, :id => withdrawal.id %></td>
+		<% else %>
+			<td><u><%= link_to 'Show', withdrawal %></u></td>
+			<td><u><%= link_to 'Destroy', withdrawal, method: :delete, data: { confirm: 'Are you sure?' } %></u></td>
+		<% end %>
+	  </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% unless admin? %>
+	<%= link_to 'New Withdrawal', new_withdrawal_path %>
+<% end %>

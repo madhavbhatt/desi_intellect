@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Borrow History</h1>
+
+<table width="500">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Friend</th>
+      <th>Status</th>
+      <th>Amount</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @borrows.each do |borrow| %>
+      <tr height="20">
+        <td><%= borrow.requestor %></td>
+        <td><%= borrow.requestee %></td>
+        <td><%= borrow.status %></td>
+        <td><%= borrow.amount %></td>
+        <td><%= link_to 'Show', borrow %></td>
+		<% if current_user.admin? %>
+			<td><%= link_to 'Destroy Record', borrow, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<% else %>
+			<% if current_user.name == borrow.requestor && borrow.status == "pending" %>
+				<td><%= link_to 'Cancel', borrow, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+			<% elsif current_user.name == borrow.requestee && borrow.status == "pending" %>
+				<td><%= link_to "Accept", :controller => :borrows, :action => :accept, :id => borrow.id %></td>
+				<td><%= link_to "Decline", :controller => :borrows, :action => :decline, :id => borrow.id %></td>
+			<% else %>
+				<% if current_user.name == borrow.requestor && borrow.status == "pending" %>
+					<td><%= link_to 'Cancel', borrow, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+				<% elsif current_user.name == borrow.requestee && borrow.status == "pending" %>
+					<td><%= link_to "Accept", :controller => :borrows, :action => :accept, :id => borrow.id %></td>
+					<td><%= link_to "Decline", :controller => :borrows, :action => :decline, :id => borrow.id %></td>
+				<% else %>
+					<!-- Empty, No Borrows Active -->
+				<% end %>
+			<% end %>
+		<% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Back', root_path %>

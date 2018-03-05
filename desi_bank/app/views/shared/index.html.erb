@@ -1,0 +1,26 @@
+<% provide(:title, 'Users') %>
+<% if admin? %>
+	<h1>All Users</h1>
+<% else %>
+	<h1>User Search</h1>
+<% end %>
+
+<%= form_tag(users_path, :method => "get", id: "search-form") do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search Name or Email" %>
+    <%= submit_tag "Search", :name => nil %>
+<% end %>
+
+<% if @users.empty? %>
+	<!-- do nothing -->
+<% else %>
+	<%= will_paginate %>
+
+
+	<ul class = "users">
+		<%= render @users %>
+	</ul>
+	
+
+	<%= will_paginate %>
+<% end %>
+

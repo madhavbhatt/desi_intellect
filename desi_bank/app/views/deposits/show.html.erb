@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Account:</strong>
+  <b><%= link_to @deposit.user_id, :controller => :accounts, :action => :show, :id => current_accounts.select{|x| x.acct_number == @deposit.user_id.to_s}.collect{|x| x.id} %></b>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @deposit.date %>
+</p>
+
+<p>
+  <strong>Deposit Amount:</strong>
+  <% if @deposit.amount %>
+  	$<%= sprintf("%.2f",@deposit.amount) %>
+  <% else %>
+  	$<%= "0.00" %>
+  <% end %>
+</p>
+
+<%= link_to 'Back', deposits_path %>

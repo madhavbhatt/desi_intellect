@@ -1,0 +1,24 @@
+<li>
+	<% if !current_user?(user) %>
+		<%= gravatar_for user, size: 50 %>
+		<%= link_to user.name, user %>
+		<% if current_user.admin? %>
+			| <%= link_to "Delete", user, method: :delete, data: {confirm: "You Sure?" } %>
+		<% elsif !current_user.admin? %>
+			<% friends = Friendship.find_by_user_id_and_friend_id(current_user, user) %>
+			<% if friends %>
+				<% if friends.status == 'accepted' %>
+					| <%= link_to "Borrow Request", new_borrow_path(id: current_user.id, friend_id: user) %>
+					| <%= link_to "Remove Friend", friendships_cancel_path(friend_param: user) %>
+				<% elsif friends.status == 'pending' %>
+					| <%= link_to "Accept", friendships_accept_path(friend_param: user) %> 
+					| <%= link_to "Decline", friendships_decline_path(friend_param: user) %>
+				<% else %>
+					| <%= link_to "Cancel", friendships_cancel_path(friend_param: user) %>
+				<% end %>
+			<% else %>
+				| <%= link_to "Add Friend", friendships_create_path(friend_param: user) %>
+			<% end %>
+		<% end %>
+	<% end %>
+</li>

@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>From:</strong>
+  <%= @transfer.from %>
+</p>
+
+<p>
+  <strong>To:</strong>
+  <%= @transfer.to %>
+</p>
+
+<p>
+  <strong>Transfer Amount:</strong>
+  <% if @transfer.amount %>
+	$<%= sprintf("%.2f",@transfer.amount) %>
+  <% else %>
+	$<%= "0.00" %>
+  <% end %>
+</p>
+
+<p>
+  <strong>Start:</strong>
+  <%= @transfer.start %>
+</p>
+
+<p>
+  <strong>Effective:</strong>
+  <%= @transfer.effective %>
+</p>
+
+<%= link_to 'Back', transfers_path %>

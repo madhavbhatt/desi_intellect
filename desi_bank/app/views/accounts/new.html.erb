@@ -1,0 +1,14 @@
+<h1>Are you sure?</h1>
+<%= form_for @account do |a| %>
+	<%= a.label :owner %><b>:</b>
+	<%= a.label :owner, current_user.name %>
+	<br>
+	<%= a.label :balance %><b>:</b>
+	<%= a.label :balance, "$0.00" %>
+	<br>
+	<%= a.label :status %><b>:</b>
+	<%= a.label :status, "Not Submitted" %>
+	<br><br><br>
+	<%= a.submit "Submit", class: "btn btn-primary", action: "submit" %>
+	<h1><u><%= link_to "Cancel", :action => :index %></u></h1>
+<% end %>

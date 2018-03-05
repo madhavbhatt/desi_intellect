@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Account:</strong>
+  <b><%= link_to @withdrawal.user_id, :controller => :accounts, :action => :show, :id => current_accounts.select{|x| x.acct_number == @withdrawal.user_id.to_s}.collect{|x| x.id} %></b>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @withdrawal.date %>
+</p>
+
+<p>
+  <strong>Withdrawal Amount:</strong>
+  <% if @withdrawal.amount %>
+	$<%= sprintf("%.2f",@withdrawal.amount) %>
+  <% else %>
+	$<%= "0.00" %>
+  <% end %>
+</p>
+
+<%= link_to 'Back', withdrawals_path %>

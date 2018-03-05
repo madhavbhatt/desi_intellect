@@ -1,0 +1,68 @@
+<header class ="navbar navbar-fixed-top navbar-inverse">
+	<div class = "container">
+		<%= link_to "Bank of Bogus Transactions", root_path, id: "logo" %>
+		<nav>
+			<ul class = "nav navbar-nav navbar-right">
+				<% if logged_in? %>
+					<li><%= link_to "Overview", current_user %></li>
+					<% if admin? %>
+						<li><%= link_to "Users", users_path %></li>
+						<li><%= link_to "Sign Up", signup_path %>
+						<li class = "dropdown">
+							<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">
+								Approvals <b class = "caret"></b>
+							</a>
+							<ul class = "dropdown-menu">
+								<li><%= link_to "Accounts",{:controller => "accounts", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Deposits",{:controller => "deposits", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Withdrawals", {:controller => "withdrawals", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Transfers", {:controller => "transfers", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Borrows", {:controller => "borrows", :action => "index", :id => current_user.id} %></li>
+	            			</ul>
+						</li>
+					<% else %>
+						<li><%= link_to "Search", users_path %></li>
+						<li><%= link_to "Friends", friends_path %></li>
+						<li class = "dropdown">
+							<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">
+								Banking <b class = "caret"></b>
+							</a>
+							<ul class = "dropdown-menu">
+								<li><%= link_to "Accounts",{:controller => "accounts", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Deposits",{:controller => "deposits", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Withdrawals", {:controller => "withdrawals", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Transfers", {:controller => "transfers", :action => "index", :id => current_user.id} %></li>
+								<li><%= link_to "Borrows", {:controller => "borrows", :action => "index", :id => current_user.id} %></li>
+	            			</ul>
+						</li>
+					<% end %>
+					<li class = "dropdown">
+						<a href = "#" class = "dropdown-toggle" data-toggle = "dropdown">
+							Profile <b class = "caret"></b>
+						</a>
+						<ul class = "dropdown-menu">
+							<li><%= link_to "Profile", current_user %></li>
+							<% if !admin? %>
+								<li><%= link_to "Friends", friends_path %></li>
+							<% end %>
+							<li><%= link_to "Edit Info", edit_user_path(current_user) %></li>
+							<li class = "divider"></li>
+							<li>
+								<%= link_to "Log Out", logout_path, method: "delete" %>
+							</li>
+						</ul>
+					</li>
+				<% else %>
+					<li><%= link_to "Home", root_path %></li>
+					<% if current_page?(login_path) %>
+						<li><%= link_to "Sign Up", signup_path %></li>
+					<% else %>
+						<li><%= link_to "Sign Up", signup_path %></li>
+					<% end %>
+				<% end %>
+				<li><%= link_to "Contact", contact_path %></li>
+				<li><%= link_to "Help", help_path %></li>
+			</ul>
+		</nav>
+	</div>
+</header>

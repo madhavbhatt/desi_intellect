@@ -1,0 +1,37 @@
+<%= form_for(@borrow) do |f| %>
+	<% if @borrow.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= pluralize(@borrow.errors.count, "error") %> prohibited this borrow from being saved:</h2>
+
+			<ul>
+				<% @borrow.errors.full_messages.each do |message| %>
+					<li><%= message %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+	
+	<div class="field">
+		<%= f.label :requestor %><br>
+		<%= f.text_field :requestor, value: User.find(params[:id]).name, readonly: true %>
+	</div>
+	<div class="field">
+		<%= f.label :to_account %><br>
+		<%= f.select :to_account, current_accounts.select{|x| x.status == "active" || x.status == "ACTIVE" }.collect{|x| x.acct_number} %>
+	</div>
+	<div class="field">
+		<%= f.label :requestee %><br>
+		<%= f.text_field :requestee, value: User.find(params[:friend_id]).name, readonly: true %>
+	</div>
+	<div class="field">
+		<%= f.label :from_account %><br>
+		<%= f.select :from_account, Account.all.select{|x| Friendship.exists?(current_user, User.find(x.owner.to_i)) }.collect{|x| x.acct_number } %>
+	</div>
+	<div class="field">
+		<%= f.label :amount %>
+		<%= f.text_field :amount %>
+	</div>
+	<div class="actions">
+		<%= f.submit %>
+	</div>
+<% end %>

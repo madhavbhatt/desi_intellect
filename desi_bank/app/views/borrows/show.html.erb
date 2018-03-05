@@ -1,0 +1,42 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @borrow.requestor %>
+</p>
+
+<p>
+	<strong>To Account: </strong>
+	<%= @borrow.to_account %>
+</p>
+
+<p>
+  <strong>Friend:</strong>
+  <%= @borrow.requestee %>
+</p>
+
+<p>
+	<strong>From Account: </strong>
+	<%= @borrow.from_account %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @borrow.amount %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @borrow.status %>
+</p>
+
+
+<% if @borrow.status == "pending" %>
+	<% if @borrow.requestor == current_user.name %>
+		<%= link_to "Cancel", :controller => :borrows, :action => :destroy, data: { confirm: 'Are you sure?' } %>
+	<% else %>
+		<%= link_to "Accept", :controller => :borrows, :action => :accept, :id => borrow.id %>
+		<%= link_to "Decline", :controller => :borrows, :action => :decline, :id => borrow.id %>
+	<% end %>
+<% end %>
+<%= link_to 'Back', root_path %>

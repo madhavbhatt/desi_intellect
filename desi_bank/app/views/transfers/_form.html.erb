@@ -1,0 +1,37 @@
+<%= form_for(@transfer) do |f| %>
+  <% if @transfer.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@transfer.errors.count, "error") %> prohibited this transfer from being saved:</h2>
+
+      <ul>
+      <% @transfer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+   <div class="field">
+    <%= f.label :from %>
+    <%= f.select :from, current_accounts.select{|x| x.status == "active" || x.status == "ACTIVE" }.collect{|x| x.acct_number} %>
+  </div>
+  <div class="field">
+    <%= f.label :to %><br>
+	<%= f.select :to, Account.all.select{|x| Friendship.exists?(current_user, User.find(x.owner.to_i)) }.collect{|x| x.acct_number } %>
+  </div>
+  <div class="field">
+    <%= f.label :amount %><br>
+    <%= f.text_field :amount %>
+  </div>
+  <div class="field">
+    <%= f.label :start %><br>
+    <%= f.date_select :start %>
+  </div>
+  <div class="field">
+    <%= f.label :effective %><br>
+    <%= f.date_select :effective %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
