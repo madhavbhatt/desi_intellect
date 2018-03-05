@@ -13,8 +13,8 @@ urlpatterns = [
     url(r'^register/$', register_view, name='register'),
     url(r'^forgot_password/$', forgot_password, name="forgot_password"),
     url(r'^password_change/$', password_change, name="password_change"),
-    url(r'^password_reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', password_reset, name="password_reset"),
-    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', activate, name='activate'),
+    url(r'^password_reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.*)/$', password_reset, name="password_reset"),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.*)/$', activate, name='activate'),
     url(r'^logout/$', logout_view, name='logout'),
     url(r'^tinymce/', include('tinymce.urls')),
 ]

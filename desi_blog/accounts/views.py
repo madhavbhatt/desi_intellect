@@ -47,11 +47,11 @@ def register_view(request):
         user.save()
         current_site = get_current_site(request)
         mail_subject = 'Activate your blog account.'
-        message = render_to_string('acc_active_email.html', {
+        message = render_to_string('account_activation_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': account_activation_token.make_token(user),
+            'token': account_activation_token.generate_token(user.username),
         })
         to_email = form.cleaned_data.get('email')
         email = EmailMessage(
@@ -70,13 +70,20 @@ def activate(request, uidb64, token):
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
-    else:
-        return HttpResponse('Activation link is invalid!')
 
+    if token not in open('acc_activate.txt').read():
+        valid_token = account_activation_token.is_valid_token(token)
+        if user is not None and valid_token is not None:
+            user.is_active = True
+            acc_activate = open('acc_activate.txt', 'a')
+            acc_activate.write(token)
+            acc_activate.close()
+            user.save()
+            return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        else:
+            return HttpResponse('Activation link is invalid!')
+    else:
+        return HttpResponse('This Link Has Expired')
 
 @xframe_options_deny
 @never_cache
@@ -98,8 +105,10 @@ def forgot_password(request):
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': account_activation_token.make_token(user),
+            'token': account_activation_token.generate_token(user.username)
         })
+        print urlsafe_base64_encode(force_bytes(user.pk))
+        print account_activation_token.generate_token(user.username)
         email = EmailMessage(
             mail_subject, message, to=[to_email]
         )
@@ -116,27 +125,35 @@ def password_reset(request, uidb64, token):
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        form = PasswordResetForm(request.POST or None)
-        if form.is_valid():
-            user = User.objects.get(username__iexact=user)
-            password = form.cleaned_data.get("password")
-            user.set_password(password)
-            user.save()
-            current_site = get_current_site(request)
-            mail_subject = 'Your password was recently changed'
-            message = render_to_string('password_reset_done.html', {
-                'user': user,
-                'domain': current_site.domain,
-            })
-            email = EmailMessage(
-                mail_subject, message, to=[user.email]
-            )
-            email.send()
-            return HttpResponse("Your Password has been reset. You can Login now !")
-        return render(request, 'password_reset_form.html', {'form': form})
+
+    valid_token = account_activation_token.is_valid_token(token)
+    if token not in open('pass_reset.txt').read():
+        if user is not None and valid_token is not None:
+            form = PasswordResetForm(request.POST or None)
+            if form.is_valid():
+                user = User.objects.get(username__iexact=user)
+                password = form.cleaned_data.get("password")
+                user.set_password(password)
+                user.save()
+                pass_reset = open('pass_reset.txt', 'a')
+                pass_reset.write(token)
+                pass_reset.close()
+                current_site = get_current_site(request)
+                mail_subject = 'Your password was recently changed'
+                message = render_to_string('password_reset_done.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                })
+                email = EmailMessage(
+                    mail_subject, message, to=[user.email]
+                )
+                email.send()
+                return HttpResponse("Your Password has been reset. You can Login now !")
+            return render(request, 'password_reset_form.html', {'form': form})
+        else:
+            return HttpResponse('Link is invalid!')
     else:
-        return HttpResponse('Link is invalid!')
+        return HttpResponse('This Link Has Expired')
 
 
 @xframe_options_deny
