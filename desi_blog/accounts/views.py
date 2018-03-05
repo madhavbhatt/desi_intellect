@@ -107,8 +107,6 @@ def forgot_password(request):
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.generate_token(user.username)
         })
-        print urlsafe_base64_encode(force_bytes(user.pk))
-        print account_activation_token.generate_token(user.username)
         email = EmailMessage(
             mail_subject, message, to=[to_email]
         )
