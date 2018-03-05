@@ -160,7 +160,6 @@ def password_reset(request, uidb64, token):
 def password_change(request):
     form = PasswordChangeForm(request.POST or None)
     if form.is_valid():
-        print request.user
         user = User.objects.get(username__iexact=request.user)
         password = form.cleaned_data.get("password")
         user.set_password(password)
