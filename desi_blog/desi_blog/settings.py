@@ -31,10 +31,10 @@ DIRECTORY = ''
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'vincent.chase7997@gmail.com'
+EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = 'vincent.chase7997@gmail.com'
+DEFAULT_FROM_EMAIL = ''
 
 LOGIN_REDIRECT_URL = '/'
 
