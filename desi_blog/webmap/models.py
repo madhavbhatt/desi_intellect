@@ -17,6 +17,7 @@ class Post(models.Model):
     author = models.ForeignKey('auth.user',on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = HTMLField('Content')
+    is_draft = models.BooleanField(default=True)
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
 

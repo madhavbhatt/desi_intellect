@@ -12,6 +12,7 @@
                 {% if request.user.is_authenticated %}
                     <a href="{% url 'logout' %}" class="top-menu"><button class="button">Logout</button></a>
                     <a href="{% url 'password_change'%}" class="top-menu"><button class="button">Change Password</button></a>
+                    <a href="{% url 'draft_list' %}" class="top-menu"><button class="button">Drafts</button></a>
                 {% else %}
                     <a href="{% url 'login' %}" class="top-menu"><button class="button">Login</button></a>
                     <a href="{% url 'register' %}" class="top-menu"><button class="button">Register</button></a>

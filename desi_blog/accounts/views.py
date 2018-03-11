@@ -71,8 +71,9 @@ def activate(request, uidb64, token):
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
+    valid_token = account_activation_token.is_valid_token(token)
+
     if token not in open('acc_activate.txt').read():
-        valid_token = account_activation_token.is_valid_token(token)
         if user is not None and valid_token is not None:
             user.is_active = True
             acc_activate = open('acc_activate.txt', 'a')

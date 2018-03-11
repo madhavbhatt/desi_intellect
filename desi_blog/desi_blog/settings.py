@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = 'v3q%xz&9%z)&+w665_r8=x*a6bs&lrm*=8_^nq&c_xjv9dzjwh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,17 +29,18 @@ DEBUG = True
 FILEBROWSER_DIRECTORY = ''
 DIRECTORY = ''
 
-
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = ''
+EMAIL_HOST_USER = 'vincent.chase7997@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = ''
+DEFAULT_FROM_EMAIL = 'vincent.chase7997@gmail.com'
 
 LOGIN_REDIRECT_URL = '/'
 
-ALLOWED_HOSTS = ['172.16.69.1', '127.0.0.1', '172.16.69.144', 'desi-blog.desi-intellect.com']
+#ALLOWED_HOSTS = ['172.16.69.1', '127.0.0.1', '172.16.69.144', 'desi-blog.desi-intellect.com']
+# ALLOWED_HOSTS = ['10.62.19.82', '10.63.203..2', 'desi-blog.desi-intellect.com', '10.62.18.205', '10.63.202.151']
+ALLOWED_HOSTS  = ['*']
 
 LOGIN_URL = "/login/"
 

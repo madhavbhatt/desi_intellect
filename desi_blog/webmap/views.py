@@ -19,6 +19,13 @@ def post_list(request):
 
 @xframe_options_deny
 @never_cache
+def draft_list(request):
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-created_date')
+    return render(request, 'draft_list.html', {'posts': posts})
+
+
+@xframe_options_deny
+@never_cache
 def post_detail(request, pk):
     try:
         post = get_object_or_404(Post, pk=pk)
@@ -33,11 +40,12 @@ def post_detail(request, pk):
 @login_required  # (login_url='/login/')
 def post_new(request):
     if request.method == "POST":
-        form = PostForm(request.POST, request.FILES or None)
+        form = PostForm(request.POST)
         if form.is_valid() and request.user.is_authenticated():
             post = form.save(commit=False)
             post.author = request.user
             post.published_date = timezone.now()
+            post.is_draft = form.cleaned_data.get("is_draft")
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
