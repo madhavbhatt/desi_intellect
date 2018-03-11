@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+    font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="#">Contact</a>
+</div>
+
+<h2>Animated Sidenav Example</h2>
+<p>Click on the element below to open the side navigation menu.</p>
+<span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+
+</body>
+</html>
+
+        <!--<link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>-->
+        <!--<link rel="stylesheet" href="{% static 'admin/css/style.css' %}">-->
+        <!--<style type="text/css">
+            .term {
+                    font-family: courier,fixed,swiss,sans-serif;
+                    font-size: 12px;
+                    color: #33d011;
+                    background: none;
+                }
+                .termReverse {
+                    color: #111111;
+                    background: #33d011;
+                }
+
+                /* other page styles */
+
+                .lh15 {
+                    line-height: 15px;
+                }
+
+                a,a:link,a:visited {
+                    text-decoration: none;
+                    color: #77dd11;
+                }
+                a:hover {
+                    text-decoration: underline;
+                    color: #77dd11;
+                }
+                a:active {
+                    text-decoration: underline;
+                    color: #dddddd;
+                }
+
+                a.termopen,a.termopen:link,a.termopen:visited {
+                    text-decoration: none;
+                    color: black;
+                    background: none;
+                }
+                a.termopen:hover {
+                    text-decoration: none;
+                    color: #222222;
+                    background: #77dd11;
+                }
+                a.termopen:active {
+                    text-decoration: none;
+                    color: #222222;
+                    background: #dddddd;
+                }
+        </style>
+        <!--<script language="JavaScript" type="text/javascript">
+
+            var term=new Array();
+
+            var helpPage=[
+                '%CS%+r Terminal Help %-r%n',
+                '  This is just a tiny test for multiple terminals.',
+                '  use one of the following commands:',
+                '     clear .... clear the terminal',
+                '     exit ..... close the terminal (or <ESC>)',
+                '     id ....... show terminal\'s id',
+                '     switch ... switch to other terminal',
+                '     help ..... show this help page',
+                '  other input will be echoed to the terminal.',
+                ' '
+            ];
+
+            function termOpen(n) {
+                if (!term[n]) {
+                    var y=(n==1)? 70: 280;
+                    term[n]=new Terminal(
+                        {
+                            x: 220,
+                            y: y,
+                            rows: 12,
+                            greeting: '%+r +++ Terminal #'+n+' ready. +++ %-r%nType "help" for help.%n',
+                            id: n,
+                            termDiv: 'termDiv'+n,
+                            crsrBlinkMode: true,
+                            handler: termHandler,
+                            exitHandler: termExitHandler
+                        }
+                    );
+                    if (term[n]) term[n].open();
+                }
+                else if (term[n].closed) {
+                    term[n].open();
+                }
+                else {
+                    term[n].focus();
+                }
+            }
+
+            function termHandler() {
+                // called on <CR> or <ENTER>
+                this.newLine();
+                var cmd=this.lineBuffer;
+                if (cmd!='') {
+                    if (cmd=='switch') {
+                        var other=(this.id==1)? 2:1;
+                        termOpen(other);
+                    }
+                    else if (cmd=='clear') {
+                        this.clear();
+                    }
+                    else if (cmd=='exit') {
+                        this.close();
+                    }
+                    else if (cmd=='help') {
+                        this.write(helpPage);
+                    }
+                    else if (cmd=='id') {
+                        this.write('terminal id: '+this.id);
+                    }
+                    else {
+                        this.type('You typed: '+cmd);
+                        this.newLine();
+                    }
+                }
+                this.prompt();
+            }
+
+            function termExitHandler() {
+                // optional handler called on exit
+                // activate other terminal if open
+                var other=(this.id==1)? 2:1;
+                if ((term[other]) && (term[other].closed==false)) term[other].focus();
+            }
+
+        </script>-->
+
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:25%">
+  <h3 class="w3-bar-item">Menu</h3>
+  <a href="#" class="w3-bar-item w3-button">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button">Link 3</a>
+</div>
+
+<!-- Page Content -->
+<div style="margin-left:25%">
+
+<div class="w3-container w3-teal">
+  <h1>My Page</h1>
+</div>
+
+<img src="img_car.jpg" alt="Car" style="width:100%">
+
+<div class="w3-container">
+<h2>Sidebar Navigation Example</h2>
+<p>The sidebar with is set with "style="width:25%".</p>
+<p>The left margin of the page content is set to the same value.</p>
+</div>
+
+</div>
+
+</body>
+</html>

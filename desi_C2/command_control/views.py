@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Listener
@@ -7,6 +7,9 @@ from .forms import ListenerForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.views.decorators.clickjacking import *
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from c2 import connect
 
 
 @xframe_options_deny
@@ -39,11 +42,13 @@ def listener_detail(request, pk):
 # @login_required  # (login_url='/login/')
 def listener_new(request):
     if request.method == "POST":
-        form = ListenerForm(request.POST or None)
+        form = ListenerForm(request.POST)
         if form.is_valid() and request.user.is_authenticated():
             listener = form.save(commit=False)
-            listener.interface = form.cleaned_data.get['interface']
-            listener.port = form.cleaned_data.get['port']
+            listener.author = request.user
+            listener.title = form.cleaned_data['title']
+            listener.interface = form.cleaned_data['interface']
+            listener.port = form.cleaned_data['port']
             listener.save()
             return redirect('listener_detail', pk=listener.pk)
     else:
@@ -66,11 +71,12 @@ def listener_edit(request, pk):
         return response
 
     if request.method == "POST":
-        form = ListenerForm(request.POST, request.FILES or None, instance=listener)
+        form = ListenerForm(request.POST, instance=listener)
         if form.is_valid() and request.user.is_authenticated():
             listener = form.save(commit=False)
-            listener.interface = form.cleaned_data.get['interface']
-            listener.port = form.cleaned_data.get['port']
+            listener.title = form.cleaned_data['title']
+            listener.interface = form.cleaned_data['interface']
+            listener.port = form.cleaned_data['port']
             listener.save()
             return redirect('listener_detail', pk=listener.pk)
     else:
@@ -100,3 +106,17 @@ def listener_delete(request, pk):
         return redirect("/")
 
     return render(request, 'confirm_listener_delete.html', {'listener': listener})
+
+
+def terminal(request):
+    listeners = Listener.objects.filter()
+    return render(request, 'term.html', {'listeners': listeners})
+
+
+@csrf_exempt
+def result(request):
+    param = request.POST.get('command')
+    print(param)
+    output = connect(param)
+    print(output)
+    return HttpResponse(output)

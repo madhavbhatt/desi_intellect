@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="listener">
+         <div class="list">
+            {% if user.is_authenticated %}
+                <a class="btn btn-default" href="{% url 'listener_edit' pk=listener.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a class="btn btn-default" href="{% url 'listener_delete' pk=listener.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+            {% else %}
+                <p> You must be authenticated to Edit the listener</p>
+            {% endif %}
+            <h1>{{ listener.title }}</h1>
+             <h4>{{ listener.interface }}</h4>
+             <h4>{{ listener.port }}</h4>
+
+             <p align="justify" >{{ listener.description | safe }}</p>
+         </div>
+    </div>
+{% endblock %}

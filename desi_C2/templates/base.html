@@ -18,6 +18,8 @@
                     <a href="{% url 'login' %}" class="top-menu"><button class="button">Login</button></a>
                 {% endif %}
                 <a href="{% url 'listener_new' %}" class="top-menu"><button class="button">Create Listener</button></a>
+                <a href="{% url 'listener_list' %}" class="top-menu"><button class="button">Listeners</button></a>
+                <a href="{% url 'terminal' %}" class="top-menu"><button class="button">Terminal</button></a>
                 <!--<form method="POST" role="form" action="" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="text" size="20" name="search" placeholder="Search..." class="box">

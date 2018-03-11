@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div id="content-main">
+    {% block object-tools %}
+        {% if change %}
+            {% if not is_popup %}
+                <ul class="object-tools">
+                    {% block object-tools-items %}
+                    {% endblock %}
+                </ul>
+            {% endif %}
+        {% endif %}
+    {% endblock %}
+
+    <form enctype="multipart/form-data" action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form" novalidate>
+        <div>
+            {% csrf_token %}
+            <input type="text">
+            {% if adminform.first_field and add %}
+               <script type="text/javascript">document.getElementById("{{ adminform.first_field.id_for_label }}").focus();</script>
+            {% endif %}
+
+
+            <button id="id_execute" type="button" onclick="executeSource();" style="font-size: 14px; padding: 10px 20px;">Execute</button>
+            <hr><br>
+            <pre id="id_output" class="syntax"></pre>
+        </div>
+    </form>
+</div>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById('id_source'), {
+        mode: {
+            name: "python",
+            version: 2,
+            singleLineStringErrors: false
+        },
+        lineNumbers: true,
+        indentUnit: 4,
+        tabMode: "shift",
+        matchBrackets: true,
+        extraKeys: {
+            "Cmd-Enter": function(instance) {
+                executeSource();
+                return false;
+            },
+            "Ctrl-Enter": function(instance) {
+                executeSource();
+                return false;
+            }
+        }
+    });
+
+    var webshellEditor = django.jQuery('#id_output'),
+        csrf_token = django.jQuery('input[name="csrfmiddlewaretoken"]').val();
+
+    function executeSource(){
+       webshellEditor.text('Executing...');
+        django.jQuery.post('{% url "execute-script" %}',
+            {'source': editor.getValue(), 'csrfmiddlewaretoken': csrf_token},
+            function(response){
+                webshellEditor.text(response);
+                hljs.highlightBlock(webshellEditor.get(0));
+            }
+        );
+    }
+</script>
+
+{% endblock %}
+
+

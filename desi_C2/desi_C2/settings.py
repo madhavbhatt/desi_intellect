@@ -25,7 +25,7 @@ SECRET_KEY = file('/etc/secret_key_desi_c2.txt').read()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.16.69.130']
+ALLOWED_HOSTS = ['*']
 
 STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'command_control',
     'accounts',
+    'sslserver',
 ]
 
 MIDDLEWARE = [
