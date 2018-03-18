@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = file('/etc/blog_secret_key.txt').read()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 FILEBROWSER_DIRECTORY = ''
 DIRECTORY = ''
@@ -38,8 +38,6 @@ DEFAULT_FROM_EMAIL = ''
 
 LOGIN_REDIRECT_URL = '/'
 
-#ALLOWED_HOSTS = ['172.16.69.1', '127.0.0.1', '172.16.69.144', 'desi-blog.desi-intellect.com']
-# ALLOWED_HOSTS = ['10.62.19.82', '10.63.203..2', 'desi-blog.desi-intellect.com', '10.62.18.205', '10.63.202.151']
 ALLOWED_HOSTS  = ['*']
 
 LOGIN_URL = "/login/"
