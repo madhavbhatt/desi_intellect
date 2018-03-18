@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>New Listener</h1>
+    <h1>Reverse TCP Listener</h1>
     <form method="POST" class="post-form" role="form" action="" enctype="multipart/form-data" id="postform">
         {% csrf_token %}
         {{ form.as_p }}

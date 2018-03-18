@@ -182,12 +182,13 @@ div.left {
 .w3-sidebar {
     width: 10%;
     height: 80%;
-    margin-left: 10px;
+    margin-left: 5px;
     margin-top: 0px;
     background-color:#fff;
     position:fixed!important;
     border: 2px solid #4CAF50;
     z-index:1;
+    align: center;
     overflow:scroll;
     margin-bottom: 20px;
     padding: 20px 20px 20px 40px;
@@ -250,3 +251,13 @@ a.termopen:active{
     background:#dddddd;
 }
 
+.customHr {
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    color: rgba(0, 0, 0, 0);
+}

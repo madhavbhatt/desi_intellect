@@ -1,0 +1,14 @@
+{% extends 'term-base.html' %}
+{% block content %}
+    <div class="container">
+        <a title="remove" class="btn btn-default" href="{% url 'host_delete' pk=pwnedhost.pk %}"><span class="glyphicon glyphicon-remove" style="color:red"></span></a>
+        <a href="javascript:termOpen(1)" onfocus="if(this.blur)this.blur();" onmouseover="window.status='terminal 1'; return true" onmouseout="window.status=''; return true" class="termopen" id="terminal"><!--<button class="button">Terminal 1</button>--></a>
+        <div id="termDiv1" style="position:absolute; top:20px; left:100px;"></div>
+        <a href="javascript:termOpen(2)" onfocus="if(this.blur)this.blur();" onmouseover="window.status='terminal 2'; return true" onmouseout="window.status=''; return true" class="termopen" id="terminal-2"><!--<button class="button">Terminal 2</button>--></a>
+        <div id="termDiv2" style="position:absolute; top:20px; left:100px;"></div>
+    </div>
+<script>
+    document.getElementById('terminal').click();
+    document.getElementById('terminal-2').click();
+</script>
+{% endblock %}

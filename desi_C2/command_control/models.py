@@ -12,19 +12,11 @@ class Listener(models.Model):
 
 
 class pwnedHost(models.Model):
-    hostname = models.CharField(max_length=100)
+    # hostname = models.CharField(max_length=100)
+    author = models.ForeignKey('auth.user', on_delete=models.CASCADE)
     ip = models.GenericIPAddressField(max_length=16)
-    user = models.CharField(max_length=100)
+    port = models.IntegerField(default="443")
+    username = models.CharField(max_length=100)
 
-
-class Script(models.Model):
-    source = models.TextField(_('Source'))
-
-    class Meta:
-        verbose_name = _('Script')
-        verbose_name_plural = _('Scripts')
-
-    def __unicode__(self):
-        return self.name
 
 

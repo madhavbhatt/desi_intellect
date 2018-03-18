@@ -12,7 +12,7 @@
                 <h3 style="color:black">{{ listener.title }}</h3>
                 <p>{{ listener.interface}} : {{ listener.port }}</p>
                 <button class="warningbutt" type="submit" value="confirm">Confirm</button>
-                <a class="button" href="{{ listener.get_absolute_url }}">Cancel</a>
+                <a class="button" href="{% url 'listener_list' %}">Cancel</a>
             </form>
          </div>
 </div>

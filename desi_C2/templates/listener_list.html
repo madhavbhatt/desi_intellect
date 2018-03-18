@@ -42,11 +42,12 @@
                 <col width="150px" />
                 <col width="150px" />
                 <tr>
-                    <td>{{ listener.title }} </td>
+                    <td><a href="{{ listener.get_absolute_url }}">{{ listener.title }}</a></td>
                     <td>{{ listener.interface }}</td>
                     <td>{{ listener.port }}</td>
                     <td>
                         <a class="btn btn-default" href="{% url 'listener_edit' pk=listener.pk %}"><span class="glyphicon glyphicon-edit" style="color:darkorange"></span></a>
+                        <a title="rescan" class="btn btn-default" href="{% url 'listener_replay' pk=listener.pk %}"><span class="glyphicon glyphicon-repeat" style="color:darkorange"></span></a>
                         <a title="remove" class="btn btn-default" href="{% url 'listener_delete' pk=listener.pk %}"><span class="glyphicon glyphicon-remove" style="color:red"></span></a>
                     </td>
                 </tr>
