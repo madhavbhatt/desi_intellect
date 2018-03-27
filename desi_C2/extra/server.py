@@ -1,6 +1,6 @@
 import os, socket, sys
 import ssl
-
+import threading
 
 def sock_create():
     try:
@@ -9,7 +9,7 @@ def sock_create():
         global port
         global sock
         host = ''
-        port = 9999
+        port = 9998
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # s = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1)
     except socket.error as msg:
@@ -32,16 +32,18 @@ def sock_accept():
     global addr
     global hostname
     try:
+        print ("New thread")
         conn, addr = s.accept()
         print ("connecton from %s:%s" % (addr[0], addr[1]))
         print("\n")
-        hostname = conn.recv(1024)
+        # hostname = conn.recv(1024)
         menu()
     except socket.error as msg:
         print (msg)
 
 
 def menu():
+    threading.Thread(sock_accept()).start()
     while 1:
         command = raw_input(str(addr[0]) + '@' + str(hostname) + '>')
         if command == "quit" or command == 'exit':
@@ -57,7 +59,7 @@ def menu():
 def main():
     sock_create()
     sock_bind()
-    sock_accept()
+    threading.Thread(sock_accept()).start()
 
 
 main()

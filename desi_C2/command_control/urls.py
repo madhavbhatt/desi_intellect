@@ -12,6 +12,8 @@ urlpatterns = [
     url(r'^listener/(?P<pk>\d+)/$', views.listener_detail, name='listener_detail'),
     url(r'^listener/new/$', views.listener_new, name='listener_new'),
     url(r'^listener/(?P<pk>\d+)/edit/$', views.listener_edit, name='listener_edit'),
+    url(r'^payload/(?P<pk>\d+)/', views.payload_create, name='payload_create'),
+    url(r'^payload/(?P<pk>\d+)/download', views.payload_download, name='payload_download'),
     url(r'^listener/(?P<pk>\d+)/delete/$', views.listener_delete, name='listener_delete'),
 ]
 

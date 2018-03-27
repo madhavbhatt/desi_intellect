@@ -25,6 +25,8 @@ SECRET_KEY = open('/etc/secret_key_desi_c2.txt').read()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+LOGIN_URL = "/login/"
+
 ALLOWED_HOSTS = ['*']
 
 STATIC_URL = '/static/'

