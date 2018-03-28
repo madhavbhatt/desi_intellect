@@ -1,0 +1,162 @@
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Django desi_command_control</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{% static 'css/term.css' %}">
+        <script language="JavaScript" type="text/javascript" src="{% static 'js/termlib.js' %}"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script language="JavaScript" type="text/javascript">
+
+        var term=new Array();
+
+        var helpPage=[
+            '%CS%+r Terminal Help %-r%n',
+            '  This is just a tiny test for multiple terminals.',
+            '  use one of the following commands:',
+            '     clear .... clear the terminal',
+            '     exit ..... close the terminal (or <ESC>)',
+            '     id ....... show terminal\'s id',
+            '     switch ... switch to other terminal',
+            '     help ..... show this help page',
+            '     shell .... input followed by shell will be echoed to the terminal.',
+            ' '
+        ];
+
+        function termOpen(n) {
+            if (!term[n]) {
+                var y=(n==1)? 70: 70;
+                var x=(n==1)? 70: 680;
+                term[n]=new Terminal(
+                    {
+                        x: x,
+                        y: y,
+                        rows: 40,
+                        greeting: '%+r +++ Terminal #'+n+' ready. +++ %-r%nType "help" for help.%n',
+                        id: n,
+                        termDiv: 'termDiv'+n,
+                        crsrBlinkMode: true,
+                        handler: termHandler,
+                        exitHandler: termExitHandler
+                    }
+                );
+                if (term[n]) term[n].open();
+            }
+            else if (term[n].closed) {
+                term[n].open();
+            }
+            else {
+                term[n].focus();
+            }
+        }
+
+        function termHandler() {
+            // called on <CR> or <ENTER>
+            this.newLine();
+            var cmd=this.lineBuffer;
+
+            if (cmd!='') {
+                if (cmd=='switch') {
+                    var other=(this.id==1)? 2:1;
+                    termOpen(other);
+                }
+                else if (cmd=='clear') {
+                    this.clear();
+                }
+                else if (cmd=='exit') {
+                    this.close();
+                }
+                else if (cmd=='help') {
+                    this.write(helpPage);
+                }
+                else if (cmd == 'id') {
+                    this.write('terminal id: '+ this.id);
+                }
+                else if (cmd.substring(0,5)=='shell') {
+                        {% if pwnedhost %}
+                        this.send(
+                            {
+                              url:      "{% url 'result' pwnedhost.pk %}" ,
+                              method:   "post",
+                              data:     {'command':cmd},
+                              callback: mySocketCallback
+                            }
+                          );
+                          return;
+                        {% endif %}
+
+                      function mySocketCallback() {
+                            if (this.socket.success) {
+                               // status 200 OK
+                               this.write(this.socket.responseText);
+                            }
+                            else if (this.socket.errno) {
+                               // connection failed
+                               this.write("Connection error: " + this.socket.errstring);
+                            }
+                            else {
+                               // connection succeeded, but server returned other status than 2xx
+                               this.write("Server returned: " +
+                                          this.socket.status + " " + this.socket.statusText);
+                            }
+                            this.prompt();
+                          }
+                       this.newLine();
+                      }
+                else {
+                    this.write('usage : shell ' + cmd);
+                }
+            }
+
+                this.prompt();
+
+        }
+
+        function termExitHandler() {
+            // optional handler called on exit
+            // activate other terminal if open
+            var other=(this.id==1)? 2:1;
+            if ((term[other]) && (term[other].closed==false)) term[other].focus();
+        }
+
+        </script>
+    </head>
+    <body>
+        <div class="page-header">
+                <!--<span class="glyphicon glyphicon-plus"></span>-->
+                <!--<a href="" class="top-menu"><button class="button">Search</button></a>-->
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="top-menu"><button class="button">Logout</button></a>
+                    <a href="{% url 'listener_new' %}" class="top-menu"><button class="button">Create Listener</button></a>
+                    <a href="{% url 'listener_list' %}" class="top-menu"><button class="button">Listeners</button></a>
+                    <a href="{% url 'terminal' %}" class="top-menu"><button class="button">Terminal</button></a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="top-menu"><button class="button">Login</button></a>
+                {% endif %}
+                <!--<form method="POST" role="form" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="text" size="20" name="search" placeholder="Search..." class="box">
+                </form>-->
+            <h1><a href="/">Django desi_command_control</a></h1>
+        </div>
+        <!-- Sidebar -->
+        <div class="w3-sidebar" style="width:15%" align="center">
+          <h2 class="w3-bar-item">Pwned Hosts</h2>
+            <hr class="customHr">
+            {% for pwnedhost in pwnedhosts %}
+                <a href="{% url 'host' pk=pwnedhost.pk %}" class="button">{{ pwnedhost.ip }}</a>
+            {% endfor %}
+        </div>
+
+        <div class="content container">
+            <div class="row">
+                <div class="col-md-8">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
