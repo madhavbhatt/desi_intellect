@@ -37,36 +37,34 @@ def listener_detail(request, pk):
 @xframe_options_deny
 @never_cache
 @login_required
-def listener_replay(request, pk):
-    listeners = Listener.objects.filter()
-    try:
-        listener = get_object_or_404(Listener, pk=pk)
-    except:
-        raise Http404
-    create_socket(listener.author, listener.interface, listener.port)
-    sock_connect()
-    return render(request, 'listener_list.html', {'listeners': listeners})
-
-
-@xframe_options_deny
-@never_cache
-@login_required
 def listener_new(request):
     if request.method == "POST":
         form = ListenerForm(request.POST)
-        if form.is_valid() and request.user.is_authenticated():
+        if form.is_valid():
             listener = form.save(commit=False)
             listener.author = request.user
             listener.title = form.cleaned_data['title']
             listener.interface = form.cleaned_data['interface']
             listener.port = form.cleaned_data['port']
-            create_socket(listener.author, listener.interface, listener.port)
-            sock_connect()
             listener.save()
             return redirect('listener_detail', pk=listener.pk)
     else:
         form = ListenerForm()
     return render(request, 'listener_edit.html', {'form': form})
+
+
+@xframe_options_deny
+@never_cache
+@login_required
+def listener_replay(request, pk):
+    try:
+        listener = get_object_or_404(Listener, pk=pk)
+    except:
+        raise Http404
+    create_socket(listener.author, listener.interface, listener.port, listener.aes_encryption_key)
+    sock_connect()
+    listeners = Listener.objects.filter()
+    return render(request, 'listener_list.html', {'listeners': listeners})
 
 
 @xframe_options_deny
@@ -85,14 +83,12 @@ def listener_edit(request, pk):
 
     if request.method == "POST":
         form = ListenerForm(request.POST, instance=listener)
-        if form.is_valid() and request.user.is_authenticated():
+        if form.is_valid():
             listener = form.save(commit=False)
             listener.title = form.cleaned_data['title']
             listener.interface = form.cleaned_data['interface']
             listener.port = form.cleaned_data['port']
             listener.save()
-            create_socket(listener.author, listener.interface, listener.port)
-            sock_connect()
             listeners = Listener.objects.filter()
             return render(request, 'listener_list.html', {'listeners': listeners})
     else:
@@ -108,7 +104,7 @@ def payload_create(request, pk):
         listener = get_object_or_404(Listener, pk=pk)
     except:
         raise Http404
-    generate_payload.gen_payload(listener.id, listener.port)
+    generate_payload.gen_payload(listener.id, listener.port, listener.aes_encryption_key)
     listeners = Listener.objects.filter()
     return render(request, 'listener_list.html', {'listeners': listeners})
 
@@ -118,7 +114,7 @@ def payload_create(request, pk):
 @login_required
 def payload_download(request, pk):
     listener = get_object_or_404(Listener, pk=pk)
-    return HttpResponseRedirect('static/payloads/listener-%d.py' % listener.id)
+    return HttpResponseRedirect('static/payloads/listener-%d' % listener.id)
 
 
 @xframe_options_deny

