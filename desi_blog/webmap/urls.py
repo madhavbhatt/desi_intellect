@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from . import views
 
 
@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/delete/$', views.post_delete, name='post_delete'),
     url(r'^search/$', views.search, name='search'),
     url(r'^confirm/post/delete/$', views.post_delete, name='confrim_post_delete'),
+    url(r'^settings/', include('django_mfa.urls', namespace="mfa")),
 ]
