@@ -15,8 +15,8 @@
                     <a href="{% url 'draft_list' %}" class="top-menu"><button class="button">Drafts</button></a>
                 {% else %}
                     <a href="{% url 'login' %}" class="top-menu"><button class="button">Login</button></a>
-                    <a href="{% url 'register' %}" class="top-menu"><button class="button">Register</button></a>
-                    <a href="{% url 'forgot_password' %}" class="top-menu"><button class="button">Forgot Password</button></a>
+                    <!--<a href="url 'register'" class="top-menu"><button class="button">Register</button></a>
+                    <a href="url 'forgot_password' " class="top-menu"><button class="button">Forgot Password</button></a>-->
                 {% endif %}
                 <a href="{% url 'post_new' %}" class="top-menu"><button class="button">New Post</button></a>
                 <form method="POST" role="form" action="{% url 'search' %}" enctype="multipart/form-data">

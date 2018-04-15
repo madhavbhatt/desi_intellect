@@ -37,6 +37,27 @@ def login_view(request):
 
 @xframe_options_deny
 @never_cache
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect("/")
+
+@xframe_options_deny
+@never_cache
+@login_required
+def password_change(request):
+    form = PasswordChangeForm(request.POST or None)
+    if form.is_valid():
+        user = User.objects.get(username__iexact=request.user)
+        password = form.cleaned_data.get("password")
+        user.set_password(password)
+        user.save()
+        return HttpResponse('Your Password has been changed')
+    return render(request, 'password_change_form.html', {'form': form})
+
+
+"""
+@xframe_options_deny
+@never_cache
 def register_view(request):
     form = UserRegisterForm(request.POST or None)
     if form.is_valid():
@@ -85,12 +106,6 @@ def activate(request, uidb64, token):
             return HttpResponse('Activation link is invalid!')
     else:
         return HttpResponse('This Link Has Expired')
-
-@xframe_options_deny
-@never_cache
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect("/")
 
 
 @xframe_options_deny
@@ -153,17 +168,5 @@ def password_reset(request, uidb64, token):
             return HttpResponse('Link is invalid!')
     else:
         return HttpResponse('This Link Has Expired')
+"""
 
-
-@xframe_options_deny
-@never_cache
-@login_required
-def password_change(request):
-    form = PasswordChangeForm(request.POST or None)
-    if form.is_valid():
-        user = User.objects.get(username__iexact=request.user)
-        password = form.cleaned_data.get("password")
-        user.set_password(password)
-        user.save()
-        return HttpResponse('Your Password has been changed')
-    return render(request, 'password_change_form.html', {'form': form})
