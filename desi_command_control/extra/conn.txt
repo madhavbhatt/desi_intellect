@@ -1,1 +1,0 @@
-(<socket._socketobject object at 0x7ff9f4ca92f0>, ('172.16.69.130', 33664))
