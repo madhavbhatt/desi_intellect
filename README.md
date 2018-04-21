@@ -1,7 +1,5 @@
 # desi_intellect
 
-This project is focused mostly cyber security. Exploits will give you utility to create payloads. You would have to do some of your own digging in order to exploit the system. 
-
 [!] LEGAL DISCLAIMER: 
 
     THE SOFTWAREW IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
