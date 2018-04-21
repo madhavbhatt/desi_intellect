@@ -1,5 +1,5 @@
 ---
-- hosts: 152.46.20.70
+- hosts: x.x.x.x
   become: true
 
   tasks:
@@ -11,7 +11,7 @@
           BOOTPROTO=static
           ONBOOT=yes    
           TYPE="Ethernet"
-          IPADDR=192.168.3.1
+          IPADDR=192.168.3.2
           NETMASK=255.255.255.0
           NETWORK=192.168.3.0
 
@@ -19,7 +19,7 @@
        service: name=networking state=restarted
 
 
-- hosts: 152.46.20.152
+- hosts: x.x.x.x
   become: true
   
   tasks:
