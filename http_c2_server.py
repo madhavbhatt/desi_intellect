@@ -93,7 +93,7 @@ class c2Server(BaseHTTPRequestHandler):
 
 
 def runC2server():
-    server_address = ('', 443)
+    server_address = ('', 443)  # start listening on 443 
 
     httpd = HTTPServer(server_address, c2Server)
 
