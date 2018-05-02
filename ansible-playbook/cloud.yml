@@ -1,10 +1,10 @@
 ---
-- hosts: 152.7.98.232
+- hosts: x.x.x.x
   become: true
   vars:
-    A: 152.7.98.232
-    B: 152.46.20.70
-    C: 152.46.20.152
+    A: x.x.x.x
+    B: y.y.y.y
+    C: z.z.z.z
 
   tasks:
     - name: create file ifcfg-gre1
@@ -31,12 +31,12 @@
     - name: Restarting Serivces
       service: name=networking state=restarted
 
-- hosts: 152.46.20.70
+- hosts: y.y.y.y
   become: true
   vars:
-    A: 152.7.98.232
-    B: 152.46.20.70
-    C: 152.46.20.152
+    A: x.x.x.x
+    B: y.y.y.y
+    C: z.z.z.z
 
   tasks:
     - name: create file ifcfg-gre1
@@ -89,7 +89,7 @@
     - name: Restarting Serivces
       service: name=sshd state=restarted
 
-- hosts: 152.46.20.152
+- hosts: z.z.z.z
   become: true
   
   tasks:
