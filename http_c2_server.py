@@ -69,7 +69,7 @@ class c2Server(BaseHTTPRequestHandler):
     def do_POST(self):
 
         self.set_headers()
-        print("data received")
+        print("data received from " + str(self.client_address[0]))
 
         """
 
@@ -81,7 +81,7 @@ class c2Server(BaseHTTPRequestHandler):
 
         """
 
-        print(self.client_address[0])
+        
 
         content_length = int(self.headers['Content-Length'])
 
