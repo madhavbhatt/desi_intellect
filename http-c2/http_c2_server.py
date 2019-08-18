@@ -68,7 +68,7 @@ class c2Server(BaseHTTPRequestHandler):
 
     def do_POST(self):
 
-        self.set_headers()
+        # self.set_headers()
         print("data received from " + str(self.client_address[0]))
 
         """
